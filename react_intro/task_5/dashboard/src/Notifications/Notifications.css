@@ -1,8 +1,7 @@
 .notifications {
   border: 1px dashed #e1003c;
   padding: 10px;
-  margin-bottom: 0;
-  width: 100%;
+  margin: 10px;
   box-sizing: border-box;
   font-size: 1.1em;
   color: black;
@@ -15,9 +14,9 @@
 }
 
 .notifications ul {
-  list-style: none;
   padding: 0;
   margin-top: 10px;
+  margin-left: 2rem;
 }
 
 .notifications ul li {
