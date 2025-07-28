@@ -1,34 +1,27 @@
-import { getCurrentYear, getFooterCopy, getLatestNotification } from './utils';
+import { getCurrentYear, getFooterCopy, getLatestNotification } from "./utils";
 
-describe('Utility Functions', () => {
+describe('Utils functions', () => {
+    describe('getCurrentYear', () => {
+        it('should return the current year', () => {
+            const currentYear = new Date().getFullYear();
+            expect(getCurrentYear()).toBe(currentYear);
+        });
+    });
 
-  // Test 1
-  test('getCurrentYear returns the current year', () => {
-    const realDate = Date;
-    global.Date = class extends realDate {
-      constructor(dateString) {
-        if (dateString) {
-          return new realDate(dateString);
-        }
-        return new realDate('2025-01-01T00:00:00.000Z');
-      }
-    };
-    expect(getCurrentYear()).toBe(2025);
-    global.Date = realDate;
-  });
+    describe('getFooterCopy', () => {
+        it('Should return "Holberton School" when argument is true', () => {
+            expect(getFooterCopy(true)).toBe('Holberton School');
+        });
 
-  // Test 2
-  test('getFooterCopy returns "Holberton School" when isIndex is true', () => {
-    expect(getFooterCopy(true)).toBe('Holberton School');
-  });
+        it('Should return "Holberton School main dashboard" when argument is false', () => {
+            expect(getFooterCopy(false)).toBe('Holberton School main dashboard');
+        });
+    });
 
-  // Test 3
-  test('getFooterCopy returns "Holberton School main dashboard" when isIndex is false', () => {
-    expect(getFooterCopy(false)).toBe('Holberton School main dashboard');
-  });
-
-  // Test 4
-  test('getLatestNotification returns "<strong>Urgent requirement</strong> - complete by EOD"', () => {
-    expect(getLatestNotification()).toBe('<strong>Urgent requirement</strong> - complete by EOD');
-  });
+    describe('getLatestNotification', () => {
+        it('Should return the correct notification string', () => {
+            const expectedString = '<strong>Urgent requirement</strong> - complete by EOD';
+            expect(getLatestNotification()).toBe(expectedString);
+        });
+    });
 });
