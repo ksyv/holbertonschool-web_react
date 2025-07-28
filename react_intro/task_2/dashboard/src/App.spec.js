@@ -1,3 +1,4 @@
+// task_0/dashboard/src/App.spec.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
@@ -13,7 +14,7 @@ describe('App Component', () => {
   // Test 2
   test('renders "Login to access the full dashboard" text (case-insensitive)', () => {
     render(<App />);
-    expect(screen.getByText('login to access the FULL dashboard', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText(/Login to access the full Dashboard/i)).toBeInTheDocument();
   });
 
   // Test 3
