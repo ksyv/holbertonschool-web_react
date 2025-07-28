@@ -11,9 +11,9 @@ describe('App Component', () => {
   });
 
   // Test 2
-  test('renders "Login to access the full dashboard" text', () => {
+  test('renders "Login to access the full dashboard" text (case-insensitive)', () => {
     render(<App />);
-    expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
+    expect(screen.getByText('login to access the FULL dashboard', { exact: false })).toBeInTheDocument();
   });
 
   // Test 3
