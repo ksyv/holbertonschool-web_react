@@ -17,10 +17,10 @@ describe('App Component', () => {
   });
 
   // Test 3
-  test('renders "Copyright {current year} - holberton School" text', () => {
+  test('renders "Copyright {current year} - holberton School main dashboard" text', () => {
     render(<App />);
     const currentYear = new Date().getFullYear();
-    expect(screen.getByText(new RegExp(`copyright ${currentYear} - holberton school`, 'i'))).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`copyright ${currentYear} - holberton school main dashboard`, 'i'))).toBeInTheDocument();
   });
 
   // Test 4
