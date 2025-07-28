@@ -32,4 +32,22 @@ describe('Notifications Component', () => {
     expect(consoleSpy).toHaveBeenCalledWith('Close button has been clicked');
     consoleSpy.mockRestore();
   });
+
+  // Test 5
+  test('renders "New course available" list item (case-insensitive)', () => {
+    render(<Notifications />);
+    expect(screen.getByText(/new course available/i)).toBeInTheDocument();
+  });
+
+  // Test 6
+  test('renders "New resume available" list item (case-insensitive)', () => {
+    render(<Notifications />);
+    expect(screen.getByText(/new resume available/i)).toBeInTheDocument();
+  });
+
+  // Test 7
+  test('renders "Urgent requirement - complete by EOD" list item (case-insensitive)', () => {
+    render(<Notifications />);
+    expect(screen.getByText(/urgent requirement - complete by eod/i)).toBeInTheDocument();
+  });
 });
