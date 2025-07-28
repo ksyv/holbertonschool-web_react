@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://ksyv.github.io/holbertonschool-web_react",
+  "homepage": "https://ksyv.github.io/holbertonschool-web_react/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
