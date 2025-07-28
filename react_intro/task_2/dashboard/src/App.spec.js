@@ -28,4 +28,24 @@ describe('App Component', () => {
     render(<App />);
     expect(screen.getByRole('img', { name: /holberton logo/i })).toBeInTheDocument();
   });
+
+  // Test 5
+  test('renders 2 input elements', () => {
+    const { container } = render(<App />);
+    const inputElements = container.querySelectorAll('input');
+    expect(inputElements.length).toBe(2);
+  });
+
+  // Test 6
+  test('renders 2 label elements with "Email" and "Password" text', () => {
+    render(<App />);
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+  });
+
+  // Test 7
+  test('renders a button with the text "OK"', () => {
+    render(<App />);
+    expect(screen.getByRole('button', { name: /ok/i })).toBeInTheDocument();
+  });
 });
