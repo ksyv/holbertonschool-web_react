@@ -11,11 +11,10 @@ function Notifications() {
   return (
     <div className="notifications">
       <button
-        className="notifications-button" // Utilise la classe CSS
-        aria-label="Close"
+        className="notifications-button" 
         onClick={handleButtonClick}
       >
-        <img src={closeIcon} alt="Close button" /> {/* Supprime les styles en ligne de l'image */}
+        <img src={closeIcon} alt="Close button" /> 
       </button>
       <p>Here is the list of notifications</p>
       <ul>
