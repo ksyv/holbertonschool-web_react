@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import App from '../App/App.jsx'
+import App from './App.jsx'
 
 test('Renders h1 element with "School Dashboard text"', () => {
     render(<App />);
