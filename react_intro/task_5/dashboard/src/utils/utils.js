@@ -6,7 +6,7 @@ export function getFooterCopy(isIndex) {
   if (isIndex) {
     return 'Holberton School';
   }
-  return 'Holberton School main dashboard';
+  return 'holberton School main dashboard';
 }
 
 export function getLatestNotification() {
