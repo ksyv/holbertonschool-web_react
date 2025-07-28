@@ -4,9 +4,9 @@ export function getCurrentYear() {
 
 export function getFooterCopy(isIndex) {
   if (isIndex) {
-    return 'holberton School';
+    return 'Holberton School';
   }
-  return 'holberton School main dashboard';
+  return 'Holberton School main dashboard';
 }
 
 export function getLatestNotification() {
