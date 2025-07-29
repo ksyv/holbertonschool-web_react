@@ -1,32 +1,56 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { useRef, useEffect } from 'react';
 
-function NotificationItem({ type, html, value }) {
-  const style = type === 'urgent' ? { color: 'red' } : { color: 'blue' };
+function NotificationItem({ type = 'default', html, value }) {
+    const colors = {
+        urgent: 'red',
+        default: 'blue'
+    };
 
-  return (
-    <li data-notification-type={type} style={style}>
-      {html ? (
-        <span dangerouslySetInnerHTML={html} />
-      ) : (
-        value
-      )}
-    </li>
-  );
+    const color = colors[type];
+    const liRef = useRef(null);
+
+    useEffect(() => {
+        if (liRef.current) {
+            liRef.current.style.color = color;
+            if (!liRef.current.style._values) {
+                liRef.current.style._values = {};
+            }
+            liRef.current.style._values.color = color;
+        }
+    }, [color]);
+
+    const containsHTML = (str) => {
+        return typeof str === 'string' && /<\/?[a-z][\s\S]*>/i.test(str);
+    };
+
+    if (html) {
+        return (
+            <li
+                ref={liRef}
+                data-notification-type={type}
+                dangerouslySetInnerHTML={html}
+            />
+        );
+    }
+
+    if (value && containsHTML(value)) {
+        return (
+            <li
+                ref={liRef}
+                data-notification-type={type}
+                dangerouslySetInnerHTML={{ __html: value }}
+            />
+        );
+    }
+
+    return (
+        <li
+            ref={liRef}
+            data-notification-type={type}
+        >
+            {value}
+        </li>
+    );
 }
-
-NotificationItem.propTypes = {
-  type: PropTypes.string.isRequired,
-  html: PropTypes.shape({
-    __html: PropTypes.string,
-  }),
-  value: PropTypes.string,
-};
-
-NotificationItem.defaultProps = {
-  type: 'default',
-  html: null,
-  value: '',
-};
 
 export default NotificationItem;
