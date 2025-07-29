@@ -3,18 +3,19 @@ import Notifications from './Notifications';
 import { getLatestNotification } from '../utils/utils';
 
 describe('Notifications', () => {
+
   it('renders without crashing', () => {
-    render(<Notifications />);
+    render(<Notifications listNotifications={[]} />);
   });
 
   it('renders the notifications title', () => {
-    render(<Notifications />);
+    render(<Notifications listNotifications={[]} />);
     const titleElement = screen.getByText(/here is the list of notifications/i);
     expect(titleElement).toBeInTheDocument();
   });
 
   it('renders the close button', () => {
-    render(<Notifications />);
+    render(<Notifications listNotifications={[]} />);
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
   });
@@ -40,7 +41,7 @@ describe('Notifications', () => {
 
   it('logs message when close button is clicked', () => {
     const consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
-    render(<Notifications />);
+    render(<Notifications listNotifications={[]} />);
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
     expect(consoleLog).toHaveBeenCalledWith('Close button has been clicked');

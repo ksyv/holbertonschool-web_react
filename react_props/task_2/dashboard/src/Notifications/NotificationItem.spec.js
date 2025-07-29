@@ -26,7 +26,6 @@ describe('NotificationItem', () => {
     render(<NotificationItem type="urgent" html={htmlContent} />);
     const listItem = screen.getByRole('listitem');
     expect(listItem).toBeInTheDocument();
-    expect(within(listItem).getByText(/Urgent requirement/i)).toBeInTheDocument();
-    expect(within(listItem).getByRole('strong')).toBeInTheDocument();
+    expect(listItem).toContainHTML('<strong>Urgent requirement</strong>');
   });
 });
