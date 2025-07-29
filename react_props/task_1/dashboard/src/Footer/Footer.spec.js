@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Footer from './Footer';
-import { getCurrentYear, getFooterCopy } from '../utils/utils';
+import * as utils from '../utils/utils';
 
 describe('Footer', () => {
   it('renders without crashing', () => {
@@ -9,9 +9,15 @@ describe('Footer', () => {
   });
 
   it('renders the text "Copyright {current year} - Holberton School" when getFooterCopy is true', () => {
+    jest.spyOn(utils, 'getFooterCopy').mockReturnValue('Holberton School');
+    jest.spyOn(utils, 'getCurrentYear').mockReturnValue(2024);
+
     render(<Footer />);
-    const currentYear = getCurrentYear();
-    const footerText = getFooterCopy(true);
+    const currentYear = utils.getCurrentYear();
+    const footerText = utils.getFooterCopy(true);
+
     expect(screen.getByText(new RegExp(`Copyright ${currentYear} - ${footerText}`, 'i'))).toBeInTheDocument();
+
+    jest.restoreAllMocks();
   });
 });

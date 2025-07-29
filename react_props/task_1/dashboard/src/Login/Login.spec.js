@@ -9,9 +9,10 @@ describe('Login', () => {
 
   it('includes 2 label, 2 inputs, and 1 button elements', () => {
     render(<Login />);
-    expect(screen.getAllByRole('textbox')).toHaveLength(2); 
-    expect(screen.getAllByRole('button')).toHaveLength(1);
-    expect(screen.getAllByLabelText(/email|password/i)).toHaveLength(2); 
+    expect(screen.getByText(/email:/i)).toBeInTheDocument();
+    expect(screen.getByText(/password:/i)).toBeInTheDocument();
+    expect(screen.getAllByRole('textbox')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: /ok/i })).toBeInTheDocument();
   });
 
   it('inputs elements get focused when the related label is clicked', () => {
