@@ -1,47 +1,22 @@
 .notifications {
-  border: 1px dashed #e1003c;
-  padding: 10px;
-  margin: 10px;
-  box-sizing: border-box;
-  font-size: 1.1em;
-  color: black;
-  text-align: left;
-  position: relative;
+    margin: 1rem;
+    position: relative;
+    padding: 1rem;
+    border: 1px dashed red;
 }
 
 .notifications p {
-  margin: 0;
+    margin-bottom: 1rem;
 }
 
 .notifications ul {
-  padding: 0;
-  margin-top: 10px;
-  margin-left: 2rem;
+    margin-left: 2rem;
 }
 
-.notifications ul li {
-  margin-bottom: 5px;
+.notifications ul li[data-notification-type="default"] {
+    color: blue;
 }
 
-.notifications ul li[data-priority="default"] {
-  color: blue;
-}
-
-.notifications ul li[data-priority="urgent"] {
-  color: red;
-}
-
-.notifications-button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0; 
-}
-
-.notifications-button img {
-  width: 15px;
-  height: 15px;
+.notifications ul li[data-notification-type="urgent"] {
+    color: red;
 }
