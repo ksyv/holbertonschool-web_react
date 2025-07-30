@@ -1,13 +1,14 @@
-body {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 
-.App {
+#root {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
