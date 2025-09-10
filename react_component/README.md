@@ -16,15 +16,15 @@
 ## Resources
 ### Read or watch:
 * [React components](https://react.dev/reference/react/components)
-* [React Developer Tools](/rltoken/cYOQ91eTl7FdNCqPRuKDUw)
-* [React Pure components](/rltoken/-HSHX-vFfOEkflmqt697QQ)
-* [React Higher Order Components](/rltoken/T026FQniFMxPHvqftCqgIw)
-* [Class Component](/rltoken/amDJ74wRxqcgthtWEXHL-Q)
-* [Implement a pure component](/rltoken/eHptBvLo7VwoIA0aSZDhDw)
-* [Passing children props](/rltoken/yHFzvoUFZFMTMmiDZLON8A)
-* [Jest Mock Functions](/rltoken/ySvnGtq27zn0BY4bJCprMA)
-* [Jest Matchers](/rltoken/_NqCYSI9gMu_2zx0XFdPAQ)
-* [Check for props changes](/rltoken/TitVtPwU50LwYwi7dRFs5Q)
+* [React Developer Tools](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+* [React Pure components](https://react.dev/reference/react/PureComponent)
+* [React Higher Order Components](https://hackernoon.com/higher-order-components-hocs-in-react)
+* [Class Component](https://www.w3schools.com/react/react_class.asp)
+* [Implement a pure component](https://www.developerway.com/posts/pure-components-vs-functional-and-hooks)
+* [Passing children props](https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children)
+* [Jest Mock Functions](https://jestjs.io/docs/mock-functions)
+* [Jest Matchers](https://jestjs.io/docs/using-matchers)
+* [Check for props changes](https://jestjs.io/docs/using-matchers)
 
 ## Learning Objectives
 At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
