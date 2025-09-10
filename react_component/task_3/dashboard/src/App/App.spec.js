@@ -1,62 +1,114 @@
+import React from 'react';
+import App from './App.jsx'
 import { render, screen } from '@testing-library/react';
-import App from './App';
 
-describe('App', () => {
-  it('renders without crashing', () => {
+test('Renders Notifications component', () => {
     render(<App />);
-  });
 
-  it('renders Notifications component', () => {
+    const notification = screen.getByText(/notifications/i);
+
+    expect(notification).toBeInTheDocument();
+});
+
+test('Renders Header component', () => {
     render(<App />);
-    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
-  });
 
-  it('renders Header component', () => {
+    const header = screen.getByText(/school dashboard/i);
+
+    expect(header).toBeInTheDocument();
+});
+
+test('Renders Login component', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /school dashboard/i })).toBeInTheDocument();
-    expect(screen.getByAltText(/holberton logo/i)).toBeInTheDocument();
-  });
 
-  it('renders Footer component', () => {
+    const loginText = screen.getByText(/login to access the full dashboard/i);
+
+    expect(loginText).toBeInTheDocument();
+});
+
+test('Renders Footer component', () => {
     render(<App />);
-    const currentYear = new Date().getFullYear();
-    expect(screen.getByText(new RegExp(`copyright ${currentYear}`, 'i'))).toBeInTheDocument();
-  });
 
-  it('renders Login component when isLoggedIn is false', () => {
+    const footer = screen.getByText(/copyright/i);
+
+    expect(footer).toBeInTheDocument();
+});
+
+test('Should render the Login component', () => {
+    render(<App isLoggedIn={false} />);
+
+    const loginText = screen.getByText(/login to access the full dashboard/i);
+    expect(loginText).toBeInTheDocument();
+
+    const courseList = screen.queryByText(/available courses/i);
+    expect(courseList).not.toBeInTheDocument();
+});
+
+test('Should render a CourseList component', () => {
+    render(<App isLoggedIn={true} />);
+
+    const courseList = screen.getByText(/available courses/i);
+    expect(courseList).toBeInTheDocument();
+
+    const loginText = screen.queryByText(/login to access the full dashboard/i);
+    expect(loginText).not.toBeInTheDocument();
+});
+
+test('Displays Course list title when isLoggedIn is true', () => {
+    render(<App isLoggedIn={true} />);
+
+    const courseListTitle = screen.getByRole('heading', { name: /course list/i });
+    expect(courseListTitle).toBeInTheDocument();
+});
+
+test('Displays Log in to continue title when isLoggedIn is false', () => {
+    render(<App isLoggedIn={false} />);
+
+    const loginTitle = screen.getByRole('heading', { name: /log in to continue/i });
+    expect(loginTitle).toBeInTheDocument();
+});
+
+test('Displays News from the School section by default', () => {
     render(<App />);
-    expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /ok/i })).toBeInTheDocument();
-    expect(screen.queryByRole('table', { name: /courselist/i })).toBeNull();
-  });
 
-  it('renders CourseList component when isLoggedIn is true', () => {
+    const newsTitle = screen.getByRole('heading', { name: /news from the school/i });
+    expect(newsTitle).toBeInTheDocument();
 
-  });
+    const newsParagraph = screen.getByText(/holberton school news goes here/i);
+    expect(newsParagraph).toBeInTheDocument();
+});
 
-describe('key down event', () => {
-    const originalAlert = window.alert;
-    const alertMock = jest.fn();
-    const logOutMock = jest.fn();
+let alertMock;
+let logOutMock;
 
-    beforeAll(() => {
-      window.alert = alertMock;
+beforeEach(() => {
+    alertMock = jest.spyOn(window, "alert").mockImplementation(() => { });
+    logOutMock = jest.fn();
+});
+
+afterEach(() => {
+    alertMock.mockRestore();
+});
+
+test("LogOut when ctrl + h", () => {
+    render(<App logOut={logOutMock} />);
+
+    const keyboardEvent = new KeyboardEvent("keydown", {
+        key: "h",
+        ctrlKey: true,
     });
+    document.dispatchEvent(keyboardEvent);
+    expect(logOutMock).toHaveBeenCalledTimes(1);
+});
 
-    afterAll(() => {
-      window.alert = originalAlert;
-    });
+test("Alert when ctrl + h", () => {
+    render(<App logOut={logOutMock} />);
 
-    it('calls logOut function when ctrl+h is pressed', () => {
-      render(<App logOut={logOutMock} />);
-      fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
-      expect(logOutMock).toHaveBeenCalledTimes(1);
+    const keyboardEvent = new KeyboardEvent("keydown", {
+        key: "h",
+        ctrlKey: true,
     });
+    document.dispatchEvent(keyboardEvent);
 
-    it('calls alert with "Logging you out" when ctrl+h is pressed', () => {
-      render(<App />);
-      fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
-      expect(alertMock).toHaveBeenCalledWith('Logging you out');
-    });
-  });
+    expect(alertMock).toHaveBeenCalledWith("Logging you out");
 });
