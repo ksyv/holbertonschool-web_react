@@ -33,4 +33,30 @@ describe('App', () => {
   it('renders CourseList component when isLoggedIn is true', () => {
 
   });
+
+describe('key down event', () => {
+    const originalAlert = window.alert;
+    const alertMock = jest.fn();
+    const logOutMock = jest.fn();
+
+    beforeAll(() => {
+      window.alert = alertMock;
+    });
+
+    afterAll(() => {
+      window.alert = originalAlert;
+    });
+
+    it('calls logOut function when ctrl+h is pressed', () => {
+      render(<App logOut={logOutMock} />);
+      fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
+      expect(logOutMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls alert with "Logging you out" when ctrl+h is pressed', () => {
+      render(<App />);
+      fireEvent.keyDown(document, { key: 'h', ctrlKey: true });
+      expect(alertMock).toHaveBeenCalledWith('Logging you out');
+    });
+  });
 });
