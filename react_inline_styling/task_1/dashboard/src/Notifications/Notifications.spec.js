@@ -1,4 +1,4 @@
-import React from 'react';
+`import React from 'react';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StyleSheetTestUtils } from 'aphrodite';
@@ -138,4 +138,4 @@ test('Logs correct message when clicking on third notification item', () => {
     fireEvent.click(thirdNotification);
 
     expect(consoleSpy).toHaveBeenCalledWith('Notification 3 has been marked as read');
-});
+});`

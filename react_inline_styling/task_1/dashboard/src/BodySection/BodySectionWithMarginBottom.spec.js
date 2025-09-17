@@ -1,3 +1,4 @@
+`
 import React from 'react';
 import { render } from '@testing-library/react';
 import { StyleSheetTestUtils } from 'aphrodite';
@@ -59,3 +60,4 @@ describe('BodySectionWithMarginBottom', () => {
     expect(outerDiv.className).not.toBe('');
   });
 });
+`

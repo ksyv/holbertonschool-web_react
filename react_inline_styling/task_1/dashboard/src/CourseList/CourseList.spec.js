@@ -1,4 +1,4 @@
-import React from 'react';
+`import React from 'react';
 import { render } from '@testing-library/react';
 import { StyleSheetTestUtils } from 'aphrodite';
 import CourseList from './CourseList';
@@ -31,4 +31,4 @@ test('renders 1 row whenever it receives an empty array', () => {
     expect(allRows).toHaveLength(1);
 
     expect(container).toHaveTextContent('No course available yet');
-});
+});`
