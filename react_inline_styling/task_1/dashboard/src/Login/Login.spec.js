@@ -1,4 +1,4 @@
-`import React from 'react';
+import React from 'react';
 import Login from './Login';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -30,4 +30,4 @@ test('focuses the input when its label is clicked', async () => {
 
   await user.click(emailLabel);
   expect(emailInput).toHaveFocus();
-});`
+});

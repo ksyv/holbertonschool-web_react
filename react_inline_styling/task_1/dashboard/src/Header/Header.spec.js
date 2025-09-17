@@ -1,4 +1,4 @@
-`import React from 'react';
+import React from 'react';
 import Header from './Header';
 import { render, screen } from '@testing-library/react';
 import { StyleSheetTestUtils } from 'aphrodite';
@@ -27,4 +27,4 @@ test('Renders h1 element with "School Dashboard text"', () => {
     });
 
     expect(headingElement).toBeInTheDocument();
-});`
+});

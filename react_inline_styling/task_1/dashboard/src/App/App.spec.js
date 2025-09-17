@@ -1,4 +1,4 @@
-`import React from 'react';
+import React from 'react';
 import App from './App.jsx';
 import { render, screen } from '@testing-library/react';
 import { StyleSheetTestUtils } from 'aphrodite';
@@ -118,4 +118,4 @@ describe('App Keyboard Events Tests', () => {
 
         expect(alertMock).toHaveBeenCalledWith("Logging you out");
     });
-});`
+});
