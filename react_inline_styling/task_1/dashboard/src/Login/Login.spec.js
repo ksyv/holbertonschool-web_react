@@ -1,25 +1,33 @@
 import React from 'react';
-import { StyleSheetTestUtils } from 'aphrodite';
-import { shallow } from 'enzyme';
 import Login from './Login';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Login', () => {
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+beforeEach(() => {
+  StyleSheetTestUtils.suppressStyleInjection();
+});
 
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
+afterEach(() => {
+  StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+});
 
-  it('renders Login component without crashing', () => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.exists()).toEqual(true);
-  });
+test('renders 2 labels, 2 inputs and 1 button', () => {
+  const { container } = render(<Login />);
+  const labels = container.querySelectorAll('label');
+  const inputs = container.querySelectorAll('input');
+  expect(labels.length).toBe(2);
+  expect(inputs.length).toBe(2);
+  expect(screen.getByRole('button', { name: /ok/i })).toBeInTheDocument();
+});
 
-  it('renders 2 input tags and 1 button tag', () => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.find('input')).toHaveLength(2);
-    expect(wrapper.find('button')).toHaveLength(1);
-  });
+test('focuses the input when its label is clicked', async () => {
+  const { container } = render(<Login />);
+  const user = userEvent.setup();
+
+  const emailLabel = container.querySelector('label[for="email"]');
+  const emailInput = screen.getByLabelText(/email/i);
+
+  await user.click(emailLabel);
+  expect(emailInput).toHaveFocus();
 });
