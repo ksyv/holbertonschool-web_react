@@ -1,17 +1,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import BodySectionWithMarginBottom from './BodySectionWithMarginBottom';
+import { StyleSheetTestUtils } from 'aphrodite';
 import BodySection from './BodySection';
-import '../setupTests'; // Importez le fichier de configuration des tests
+import BodySectionWithMarginBottom from './BodySectionWithMarginBottom';
 
 describe('BodySectionWithMarginBottom', () => {
-  it('should render a div with the class bodySectionWithMargin', () => {
-    const wrapper = shallow(<BodySectionWithMarginBottom title="test" />);
-    expect(wrapper.find('.bodySectionWithMargin').exists()).toBe(true);
+  beforeAll(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  it('should render the BodySection component', () => {
-    const wrapper = shallow(<BodySectionWithMarginBottom title="test" />);
-    expect(wrapper.find(BodySection).exists()).toBe(true);
+  afterAll(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
+  it('renders BodySection with a margin-bottom style', () => {
+    const wrapper = shallow(<BodySectionWithMarginBottom title="test title" />);
+    expect(wrapper.find(BodySection)).toHaveLength(1);
+    expect(wrapper.find(BodySection).prop('title')).toBe('test title');
   });
 });

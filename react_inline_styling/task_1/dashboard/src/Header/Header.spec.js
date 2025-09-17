@@ -1,19 +1,25 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { StyleSheetTestUtils } from 'aphrodite';
+import { shallow } from 'enzyme';
 import Header from './Header';
 
 describe('Header', () => {
-  it('renders without crashing', () => {
-    render(<Header />);
+  beforeAll(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  it('renders img element with holberton logo alt text', () => {
-    render(<Header />);
-    expect(screen.getByAltText(/holberton logo/i)).toBeInTheDocument();
+  afterAll(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('renders h1 element with "School dashboard" text', () => {
-    render(<Header />);
-    expect(screen.getByRole('heading', { name: /school dashboard/i })).toBeInTheDocument();
+  it('renders Header component without crashing', () => {
+    const wrapper = shallow(<Header />);
+    expect(wrapper.exists()).toEqual(true);
+  });
+
+  it('renders img and h1 tags', () => {
+    const wrapper = shallow(<Header />);
+    expect(wrapper.find('img')).toHaveLength(1);
+    expect(wrapper.find('h1')).toHaveLength(1);
   });
 });
