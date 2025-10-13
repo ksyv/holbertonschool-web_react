@@ -1,10 +1,11 @@
 import React, {Component} from "react"
 import Box from "./composants/Box"
+import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className='App'>
         <Box/>
       </div>
     )

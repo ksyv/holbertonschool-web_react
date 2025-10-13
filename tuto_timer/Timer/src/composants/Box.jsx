@@ -5,8 +5,8 @@ import ListContainer from "./ListContainer";
 class Box extends Component {
     render() {
         return(
-            <div>
-                <div>
+            <div className='boxed--view'> 
+                <div className='boxed--view__box'>
                     <ListContainer />
                     <ActionContainer />
                 </div>
