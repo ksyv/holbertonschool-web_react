@@ -6,11 +6,15 @@ class ActionContainer extends Component {
     state = {
         isFormOpen: false
     }
+
+    handleFormOpen = () => {
+        this.setState({isFormOpen: true});
+    }
     render() {
         if(this.state.isFormOpen) {
-            return <TimerForm />
+            return <TimerForm onFormSubmit={this.props.onFormSubmit}/>
         } else {
-            return <Button />
+            return <Button handleFormOpen={this.handleFormOpen}/>
         }
     }
 }

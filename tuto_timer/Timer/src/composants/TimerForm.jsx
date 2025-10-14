@@ -16,7 +16,16 @@ class TimerForm extends Component {
     handleProjectChange = e => {
         this.setState({project: e.target.value});
     }
-    
+
+    handleClick = () => {
+        const { title, project } = this.state;
+        if(this.props.id) {
+
+        } else {
+            this.props.onFormSubmit({ title, project });
+        }
+    }
+
     render() {
         const submitText = this.props.title ? "Modifier" : "Créer";
         return(
@@ -42,7 +51,7 @@ class TimerForm extends Component {
                     </div>
                 </div>
                 <div className='form--button'>
-                    <button className='button btn--submit'>{submitText}</button>
+                    <button className='button btn--submit' onClick={this.handleClick}>{submitText}</button>
                     <button className='button btn--cancel'>Annuler</button>
                 </div>
             </div>

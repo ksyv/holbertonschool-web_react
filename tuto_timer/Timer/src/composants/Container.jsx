@@ -13,6 +13,7 @@ class Container extends Component {
                     <TimerForm 
                         title={this.props.title}
                         project={this.props.project}
+                        id={this.props.id}
                     />
                 ) : (
                     <Timer
