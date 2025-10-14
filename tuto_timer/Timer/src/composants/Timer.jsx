@@ -14,7 +14,7 @@ class Timer extends Component {
                         <h2>{this.props.title}</h2>
                     </div>
                     <div className='timer--meta'>
-                        <p>{this.props.projet}</p>
+                        <p>{this.props.project}</p>
                     </div>
                     <div className='timer--h2'>
                         <h4>{elapsedString}</h4>
