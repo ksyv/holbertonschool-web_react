@@ -5,7 +5,7 @@ import Timer from "./Timer";
 class Container extends Component {
     render() {
         return(
-            <div className=''> 
+            <div className='list--container'> 
                 {this.props.isFormOpen ? (
                     <TimerForm />
                 ) : (

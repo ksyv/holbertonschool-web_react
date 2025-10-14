@@ -5,9 +5,9 @@ import ListContainer from "./ListContainer";
 class Button extends Component {
     render() {
         return(
-            <div className='button__outline'> 
+            <button className='button__outline'> 
                 +
-            </div>
+            </button>
         )
     }
 }
