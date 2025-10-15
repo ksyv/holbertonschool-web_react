@@ -30,6 +30,8 @@ class Container extends Component {
                         runningSince={this.props.runningSince}
                         onEditFormOpen={this.handleEditFormOpen}
                         onDelete={this.props.onDelete}
+                        onPlay={this.props.onPlay}
+                        onPause={this.props.onPause}
                     />
                 )}
             </div>

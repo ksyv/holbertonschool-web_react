@@ -56,6 +56,43 @@ class Box extends Component {
             timers: this.state.timers.filter(timer => timer.id !== id)
         })
     }
+
+    handlePlay = id => {
+        console.log('play')
+        const now = Date.now()
+        this.setState({
+            timers: this.state.timers.map(timer => {
+                if (timer.id === id) {
+                    return {
+                        ...timer,
+                        runningSince: now
+                    }
+                } else {
+                    return  {...timer}
+                }
+            })
+        })
+    }
+
+    handlePause = id => {
+        console.log('pause')
+        const now = Date.now()
+        this.setState({
+            timers: this.state.timers.map(timer => {
+                if (timer.id === id) {
+                    const nextElapsed = now - timer.runningSince;
+                    return {
+                        ...timer,
+                        runningSince: null,
+                        elapsed: timer.elapsed + nextElapsed
+                    }
+                } else {
+                    return  {...timer}
+                }
+            })
+        })
+    }
+
     render() {
         return(
             <div className='boxed--view'> 
@@ -64,6 +101,8 @@ class Box extends Component {
                         onFormSubmit={this.handleEditTimer}
                         onDelete={this.handleDelete}
                         timers={this.state.timers} 
+                        onPlay={this.handlePlay}
+                        onPause={this.handlePause}
                     />
                     <ActionContainer onFormSubmit={this.handleCreateTimer}/>
                         
