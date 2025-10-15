@@ -20,7 +20,8 @@ class TimerForm extends Component {
     handleClick = () => {
         const { title, project } = this.state;
         if(this.props.id) {
-
+            const id = this.props.id;
+            this.props.onFormSubmit({id, title, project});
         } else {
             this.props.onFormSubmit({ title, project });
         }

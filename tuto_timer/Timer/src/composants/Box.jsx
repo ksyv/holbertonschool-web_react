@@ -35,11 +35,26 @@ class Box extends Component {
             timers: [...this.state.timers, timer]
         })
     }
+
+    handleEditTimer = ({id, title, project}) => {
+        this.setState({
+            timers: this.state.timers.map(timer => {
+                if (timer.id === id) {
+                    return {
+                        ...timer,
+                        title,
+                        project
+                    }
+                }
+                return {...timer}
+            })
+        })
+    }
     render() {
         return(
             <div className='boxed--view'> 
                 <div className='boxed--view__box'>
-                    <ListContainer timers={this.state.timers} />
+                    <ListContainer onFormSubmit={this.handleEditTimer} timers={this.state.timers} />
                     <ActionContainer onFormSubmit={this.handleCreateTimer}/>
                         
                 </div>

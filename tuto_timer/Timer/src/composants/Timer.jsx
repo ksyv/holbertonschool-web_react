@@ -21,7 +21,7 @@ class Timer extends Component {
                     </div>
                     <div className='actions'>
                         <span className='trash'>Supprimer</span>
-                        <span className='edit'>Modifier</span>
+                        <span onClick={this.props.onEditFormOpen} className='edit'>Modifier</span>
                     </div>
                 </div>
                 <button className='button'>Play</button>
