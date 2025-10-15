@@ -20,7 +20,7 @@ class Timer extends Component {
                         <h4>{elapsedString}</h4>
                     </div>
                     <div className='actions'>
-                        <span className='trash'>Supprimer</span>
+                        <span onClick={() => this.props.onDelete(this.props.id)} className='trash'>Supprimer</span>
                         <span onClick={this.props.onEditFormOpen} className='edit'>Modifier</span>
                     </div>
                 </div>
