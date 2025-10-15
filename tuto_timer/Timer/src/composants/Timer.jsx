@@ -1,59 +1,63 @@
-import React, {Component} from "react";
-import '../helpers'
+// src/composants/Timer.jsx
 
-class Timer extends Component {
-    componentDidMount() {
-        this.myInterval = setInterval(() => { this.forceUpdate() }, 50);
-    }
-    componentWillUnmount() {
-        clearInterval(this.myInterval);
-    }
+import React, { useEffect } from "react";
+import '../helpers';
 
-    handlePlay = () => {
-        this.props.onPlay(this.props.id);
-    }
+function Timer({ id, title, project, elapsed, runningSince, color, shadowColor, onEditFormOpen, onDelete, onPlay, onPause }) {
+    
+    // Petite astuce pour forcer la mise à jour du composant toutes les 50ms
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
 
-    handlePause = () => {
-        this.props.onPause(this.props.id);
-    }
+    useEffect(() => {
+        const interval = setInterval(() => {
+            forceUpdate();
+        }, 50);
 
+        // Cette fonction de "nettoyage" est cruciale.
+        // Elle s'exécute quand le composant est retiré de l'écran (démonté).
+        return () => clearInterval(interval);
+    }, []); // Le tableau vide [] signifie : "n'exécute cet effet qu'une seule fois, au montage"
 
-    renderButton() {
-        if (this.props.runningSince) {
-            return <button onClick={this.handlePause} className='button'>Pause</button>
+    const handlePlay = () => onPlay(id);
+    const handlePause = () => onPause(id);
+
+    const elapsedString = window.helpers.renderElapsedString(elapsed, runningSince);
+
+    const renderButton = () => {
+        if (runningSince) {
+            return <button onClick={handlePause} className='button red'>Pause</button>;
         } else {
-            return <button onClick={this.handlePlay} className='button'>Play</button>
+            return <button onClick={handlePlay} className='button'>Play</button>;
         }
-    }
-    render() {
-        const elapsedString = window.helpers.renderElapsedString(
-            this.props.elapsed,
-            this.props.runningSince
-        );
-        return(
-            <div 
-                className='timer--box'
-                style={{ '--timer-neon-color': this.props.color }}
-            > 
-                <div className='timer--content'>
-                    <div className='timer--header'>
-                        <h2>{this.props.title}</h2>
-                    </div>
-                    <div className='timer--meta'>
-                        <p>{this.props.project}</p>
-                    </div>
-                    <div className='timer--h2'>
-                        <h4>{elapsedString}</h4>
-                    </div>
-                    <div className='actions'>
-                        <span onClick={() => this.props.onDelete(this.props.id)} className='trash'>Supprimer</span>
-                        <span onClick={this.props.onEditFormOpen} className='edit'>Modifier</span>
-                    </div>
+    };
+
+    return (
+        <div
+            className='timer--box'
+            style={{
+                '--timer-neon-color': color,
+                '--timer-shadow-color': shadowColor
+            }}
+        >
+            <div className='timer--content'>
+                <div className='timer--header'>
+                    <h2>{title}</h2>
                 </div>
-                {this.renderButton()}
+                <div className='timer--meta'>
+                    <p>{project}</p>
+                </div>
+                <div className='timer--h2'>
+                    <h4>{elapsedString}</h4>
+                </div>
+                <div className='actions'>
+                    <span onClick={() => onDelete(id)} className='trash'>Supprimer</span>
+                    <span onClick={onEditFormOpen} className='edit'>Modifier</span>
+                </div>
             </div>
-        )
-    }
+            {renderButton()}
+        </div>
+    );
 }
 
 export default Timer;

@@ -1,39 +1,34 @@
-import React, {Component} from "react";
+// src/composants/ActionContainer.jsx
+
+import React, { useState } from "react";
 import TimerForm from "./TimerForm";
-import Button from "./Button";
-import PropTypes from 'prop-types';
 
-class ActionContainer extends Component {
-    static propTypes = {
-        onFormSubmit: PropTypes.func.isRequired
-    }
-    state = {
-        isFormOpen: false
-    }
+// Le composant bouton, simple, peut rester ici ou être dans son propre fichier.
+function Button({ handleFormOpen }) {
+    return (
+        <button onClick={handleFormOpen} className='button__outline'>
+            +
+        </button>
+    );
+}
 
-    handleFormOpen = () => {
-        this.setState({isFormOpen: true});
-    }
+function ActionContainer({ onFormSubmit }) {
+    const [isFormOpen, setFormOpen] = useState(false);
 
-    handleFormClose = () => {
-        this.setState({ isFormOpen: false});
-    }
+    const handleFormSubmit = (timerData) => {
+        onFormSubmit(timerData);
+        setFormOpen(false);
+    };
 
-    onFormSubmit = ({title, project}) => {
-        this.handleFormClose()
-        this.props.onFormSubmit({title, project});
-    } 
-
-    render() {
-        if(this.state.isFormOpen) {
-            return (
-                <TimerForm 
-                    onFormSubmit={this.onFormSubmit} 
-                    onCloseForm={this.handleFormClose} />
-            )
-        } else {
-            return <Button handleFormOpen={this.handleFormOpen}/>
-        }
+    if (isFormOpen) {
+        return (
+            <TimerForm
+                onFormSubmit={handleFormSubmit}
+                onCloseForm={() => setFormOpen(false)}
+            />
+        );
+    } else {
+        return <Button handleFormOpen={() => setFormOpen(true)} />;
     }
 }
 

@@ -1,119 +1,87 @@
-import React, {Component} from "react";
-import ActionContainer from "./ActionContainer";
-import ListContainer from "./ListContainer";
+// src/composants/Box.jsx
+
+import React, { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import ListContainer from "./ListContainer";
+import ActionContainer from "./ActionContainer";
 
 const NEON_PALETTES = [
-    { base: '#00ffff', shadow: '#00bfff' }, // Cyan -> Bleu
-    { base: '#39ff14', shadow: '#ccff33' }, // Vert Fluo -> Vert Citron
-    { base: '#ffff00', shadow: '#ff9900' }, // Jaune -> Orange
-    { base: '#ff00ff', shadow: '#e600e6' }, // Magenta -> Magenta Foncé
-    { base: '#ff6600', shadow: '#ff3300' }, // Orange -> Rouge-Orange
+    { base: '#00ffff', shadow: '#00bfff' },
+    { base: '#39ff14', shadow: '#ccff33' },
+    { base: '#ffff00', shadow: '#ff9900' },
+    { base: '#ff00ff', shadow: '#e600e6' },
+    { base: '#ff6600', shadow: '#ff3300' },
 ];
 
-class Box extends Component {
-    state = {
-        timers: [
-            {
-                title:'',
-                project:'',
-                id:'01',
-                elapsed: 0,
-                runningSince: null
-            },
-        ]
-    }
+function Box() {
+    const [timers, setTimers] = useState([]);
 
-    handleCreateTimer = ({title, project}) => {
-        const nextPalette = NEON_PALETTES[this.state.timers.length % NEON_PALETTES.length];
-        const timer = {
-            title, 
+    const handleCreateTimer = ({ title, project }) => {
+        const nextPalette = NEON_PALETTES[timers.length % NEON_PALETTES.length];
+        const newTimer = {
+            title,
             project,
             id: uuidv4(),
             elapsed: 0,
             runningSince: null,
             color: nextPalette.base,
             shadowColor: nextPalette.shadow,
-        }
-        this.setState({
-            timers: [...this.state.timers, timer]
-        })
-    }
+        };
+        setTimers([...timers, newTimer]);
+    };
 
-    handleEditTimer = ({id, title, project}) => {
-        this.setState({
-            timers: this.state.timers.map(timer => {
-                if (timer.id === id) {
-                    return {
-                        ...timer,
-                        title,
-                        project
-                    }
-                }
-                return {...timer}
-            })
-        })
-    }
+    const handleEditTimer = ({ id, title, project }) => {
+        setTimers(timers.map(timer => {
+            if (timer.id === id) {
+                return { ...timer, title, project };
+            }
+            return timer;
+        }));
+    };
 
-    handleDelete = id => {
-        this.setState({
-            timers: this.state.timers.filter(timer => timer.id !== id)
-        })
-    }
+    const handleDeleteTimer = (id) => {
+        setTimers(timers.filter(timer => timer.id !== id));
+    };
 
-    handlePlay = id => {
-        console.log('play')
-        const now = Date.now()
-        this.setState({
-            timers: this.state.timers.map(timer => {
-                if (timer.id === id) {
-                    return {
-                        ...timer,
-                        runningSince: now
-                    }
-                } else {
-                    return  {...timer}
-                }
-            })
-        })
-    }
+    const handlePlay = (id) => {
+        const now = Date.now();
+        setTimers(timers.map(timer => {
+            if (timer.id === id) {
+                return { ...timer, runningSince: now };
+            }
+            return timer;
+        }));
+    };
 
-    handlePause = id => {
-        console.log('pause')
-        const now = Date.now()
-        this.setState({
-            timers: this.state.timers.map(timer => {
-                if (timer.id === id) {
-                    const nextElapsed = now - timer.runningSince;
-                    return {
-                        ...timer,
-                        runningSince: null,
-                        elapsed: timer.elapsed + nextElapsed
-                    }
-                } else {
-                    return  {...timer}
-                }
-            })
-        })
-    }
+    const handlePause = (id) => {
+        const now = Date.now();
+        setTimers(timers.map(timer => {
+            if (timer.id === id) {
+                const lastElapsed = now - timer.runningSince;
+                return {
+                    ...timer,
+                    runningSince: null,
+                    elapsed: timer.elapsed + lastElapsed,
+                };
+            }
+            return timer;
+        }));
+    };
 
-    render() {
-        return(
-            <div className='boxed--view'> 
-                <div className='boxed--view__box'>
-                    <ListContainer 
-                        onFormSubmit={this.handleEditTimer}
-                        onDelete={this.handleDelete}
-                        timers={this.state.timers} 
-                        onPlay={this.handlePlay}
-                        onPause={this.handlePause}
-                    />
-                    <ActionContainer onFormSubmit={this.handleCreateTimer}/>
-                        
-                </div>
+    return (
+        <div className='boxed--view'>
+            <div className='boxed--view__box'>
+                <ListContainer
+                    timers={timers}
+                    onFormSubmit={handleEditTimer}
+                    onDelete={handleDeleteTimer}
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                />
+                <ActionContainer onFormSubmit={handleCreateTimer} />
             </div>
-        )
-    }
+        </div>
+    );
 }
 
 export default Box;
