@@ -1,9 +1,7 @@
-// src/composants/ActionContainer.jsx
 
 import React, { useState } from "react";
 import TimerForm from "./TimerForm";
 
-// Le composant bouton, simple, peut rester ici ou être dans son propre fichier.
 function Button({ handleFormOpen }) {
     return (
         <button onClick={handleFormOpen} className='button__outline'>

@@ -8,7 +8,6 @@ import {
 } from 'firebase/auth';
 
 function Auth() {
-    // ... (tout le code des useState et de la fonction handleSubmit reste identique)
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

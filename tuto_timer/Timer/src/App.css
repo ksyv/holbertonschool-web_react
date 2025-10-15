@@ -48,7 +48,7 @@ body {
 
 .boxed--view {
   width: 100%;
-  max-width: 450px; /* MODIFIÉ : Largeur par défaut pour mobile (1 colonne) */
+  max-width: 450px; 
   background-color: rgba(11, 12, 42, 0.85);
   border: 2px solid var(--primary-neon);
   border-radius: 12px;
@@ -75,20 +75,18 @@ body {
 }
 
 
-/* NOUVEAU : Conteneur de la liste pour la grille responsive */
+
 .list--container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem; /* Espace entre les cartes */
+  gap: 2rem; 
 }
 
 
-/* === TIMER & FORM CARD (MODIFIÉ) === */
+/* === TIMER & FORM CARD  === */
 .timer--box,
 .form {
-  /* MODIFIÉ : La variable --timer-neon-color est utilisée ici.
-     Si elle n'existe pas (pour le formulaire de création), elle prend --primary-neon par défaut. */
   border: 1px solid var(--timer-neon-color, var(--primary-neon));
   background: linear-gradient(145deg, rgba(11, 12, 42, 0.6), rgba(40, 44, 52, 0.6));
   border-radius: 8px;
@@ -108,12 +106,12 @@ body {
 }
 
 
-/* === TYPOGRAPHY (MODIFIÉ) === */
+/* === TYPOGRAPHY  === */
 .timer--header h2 {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.2rem;
-  color: var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
+  color: var(--timer-neon-color, var(--primary-neon)); 
   text-transform: uppercase;
 }
 
@@ -128,8 +126,8 @@ body {
   font-weight: 900;
   text-align: center;
   margin: 1.5rem 0;
-  color: var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
-  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)), 0 0 10px var(--timer-neon-color, var(--primary-neon)), 0 0 15px white; /* MODIFIÉ */
+  color: var(--timer-neon-color, var(--primary-neon)); 
+  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)), 0 0 10px var(--timer-neon-color, var(--primary-neon)), 0 0 15px white; 
 }
 
 .actions {
@@ -153,13 +151,13 @@ body {
 }
 
 .edit:hover {
-  color: var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
-  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
+  color: var(--timer-neon-color, var(--primary-neon)); 
+  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)); 
   transform: scale(1.1);
 }
 
 
-/* === FORMS (MODIFIÉ) === */
+/* === FORMS  === */
 .form--item label {
   display: block;
   font-weight: 700;
@@ -186,14 +184,14 @@ body {
 }
 
 
-/* === BUTTONS (MODIFIÉ) === */
+/* === BUTTONS  === */
 .button, .button__outline {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 4.5rem;
-  border: 2px solid var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
+  border: 2px solid var(--timer-neon-color, var(--primary-neon)); 
   border-radius: 8px;
   font-family: var(--font-family);
   font-size: 1.6rem;
@@ -203,7 +201,7 @@ body {
   text-transform: uppercase;
   background: linear-gradient(45deg, #220a22, #0d5a5a);
   transition: all 0.3s ease;
-  box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--timer-neon-color, var(--primary-neon)); /* MODIFIÉ */
+  box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--timer-neon-color, var(--primary-neon)); 
 }
 
 .button:not(.btn--cancel):not(.red), .button__outline {
@@ -233,7 +231,7 @@ body {
 
 .button__outline {
   margin-top: 1rem;
-  border-color: var(--primary-neon); /* Le bouton '+' reste toujours cyan */
+  border-color: var(--primary-neon); 
   box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--primary-neon);
 }
 .button__outline:hover {
@@ -265,7 +263,7 @@ body {
   background: #333;
 }
 
-/* === NOUVEAU : Barre de progression === */
+/* ===  Barre de progression === */
 .progress-bar-container {
     width: 100%;
     height: 4px;
@@ -300,7 +298,7 @@ body {
     transition: color 0.2s ease-in-out;
 }
 
-/* On cache le bouton radio par défaut */
+
 .radio-group input[type="radio"] {
     opacity: 0;
     position: absolute;
@@ -308,7 +306,7 @@ body {
     height: 0;
 }
 
-/* On crée notre faux bouton (le cercle extérieur) */
+
 .radio-custom {
     display: inline-block;
     width: 1.8rem;
@@ -320,18 +318,18 @@ body {
     position: relative;
 }
 
-/* Quand le label est survolé, le cercle change de couleur */
+
 .radio-label:hover .radio-custom {
     border-color: var(--primary-neon);
 }
 
-/* Quand le VRAI bouton est coché, on modifie le style de notre FAUX bouton */
+
 .radio-group input[type="radio"]:checked + .radio-custom {
     border-color: var(--primary-neon);
     box-shadow: 0 0 8px var(--primary-neon);
 }
 
-/* On crée le point intérieur qui n'apparaît que si le bouton est coché */
+
 .radio-custom::after {
     content: '';
     display: block;
@@ -342,16 +340,16 @@ body {
     height: 1rem;
     border-radius: 50%;
     background-color: var(--primary-neon);
-    transform: translate(-50%, -50%) scale(0); /* Caché par défaut */
+    transform: translate(-50%, -50%) scale(0); 
     transition: transform 0.2s ease-in-out;
 }
 
-/* Quand le VRAI bouton est coché, on fait apparaître le point intérieur */
+
 .radio-group input[type="radio"]:checked + .radio-custom::after {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* Le texte du label coché devient aussi néon */
+
 .radio-group input[type="radio"]:checked + .radio-custom + span {
     color: var(--primary-neon);
     text-shadow: 0 0 3px var(--primary-neon);
