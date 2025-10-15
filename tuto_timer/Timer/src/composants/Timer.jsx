@@ -5,19 +5,13 @@ import '../helpers';
 
 function Timer({ id, title, project, elapsed, runningSince, color, shadowColor, onEditFormOpen, onDelete, onPlay, onPause }) {
     
-    // Petite astuce pour forcer la mise à jour du composant toutes les 50ms
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            forceUpdate();
-        }, 50);
-
-        // Cette fonction de "nettoyage" est cruciale.
-        // Elle s'exécute quand le composant est retiré de l'écran (démonté).
+        const interval = setInterval(() => forceUpdate(), 50);
         return () => clearInterval(interval);
-    }, []); // Le tableau vide [] signifie : "n'exécute cet effet qu'une seule fois, au montage"
+    }, [forceUpdate]);
 
     const handlePlay = () => onPlay(id);
     const handlePause = () => onPause(id);
@@ -26,15 +20,19 @@ function Timer({ id, title, project, elapsed, runningSince, color, shadowColor, 
 
     const renderButton = () => {
         if (runningSince) {
-            return <button onClick={handlePause} className='button red'>Pause</button>;
+            // On enlève la classe "red" ! Le bouton héritera de la couleur du timer.
+            return <button onClick={handlePause} className='button'>Pause</button>;
         } else {
             return <button onClick={handlePlay} className='button'>Play</button>;
         }
     };
 
+    // On ajoute dynamiquement la classe 'is-running' si le timer tourne
+    const timerBoxClasses = `timer--box ${runningSince ? 'is-running' : ''}`;
+
     return (
         <div
-            className='timer--box'
+            className={timerBoxClasses}
             style={{
                 '--timer-neon-color': color,
                 '--timer-shadow-color': shadowColor

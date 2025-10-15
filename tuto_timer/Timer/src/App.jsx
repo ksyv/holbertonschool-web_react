@@ -1,7 +1,7 @@
 // src/App.jsx
 
 import React from 'react';
-import { useAuth } from './context/AuthContext'; // On importe notre hook
+import { useAuth } from './context/AuthContext';
 import { auth } from './firebase';
 import { signOut } from 'firebase/auth';
 import Box from './composants/Box';
@@ -9,7 +9,7 @@ import Auth from './composants/Auth/Auth';
 import './App.css';
 
 function App() {
-    const { currentUser } = useAuth(); // On récupère l'utilisateur depuis le contexte
+    const { currentUser } = useAuth();
 
     const handleLogout = () => {
         signOut(auth);
@@ -18,24 +18,20 @@ function App() {
     return (
         <div className='App'>
             {currentUser ? (
-                // Si un utilisateur est connecté, on affiche les timers
-                <>
-                    <button 
-                        onClick={handleLogout} 
-                        style={{
-                            position: 'absolute', 
-                            top: '20px', 
-                            right: '20px',
-                            zIndex: 10
-                        }}
-                        className='button btn-cancel'
-                    >
-                        Déconnexion
-                    </button>
+                // On ajoute un conteneur principal pour la mise en page
+                <div className="main-container">
+                    <header className="app-header">
+                        <h1 className="app--title">CYBER TIMER</h1>
+                        <button 
+                            onClick={handleLogout} 
+                            className='button btn-logout'
+                        >
+                            Déconnexion
+                        </button>
+                    </header>
                     <Box />
-                </>
+                </div>
             ) : (
-                // Sinon, on affiche le formulaire de connexion
                 <Auth />
             )}
         </div>
