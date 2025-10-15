@@ -1,9 +1,6 @@
-// src/composants/Timer.jsx
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import '../helpers';
 
-// Petite fonction pour formater le temps, similaire à celle qu'on a déjà
 const millisecondsToHuman = (ms) => {
     if (ms < 0) ms = 0;
     const seconds = Math.floor((ms / 1000) % 60);
@@ -16,34 +13,37 @@ const millisecondsToHuman = (ms) => {
 function Timer({ id, type, title, project, elapsed, runningSince, duration, remaining, color, shadowColor, onEditFormOpen, onDelete, onPlay, onPause }) {
     
     const [currentTime, setCurrentTime] = useState(Date.now());
+    const audioRef = useRef(null);
 
     useEffect(() => {
         const interval = setInterval(() => setCurrentTime(Date.now()), 50);
         return () => clearInterval(interval);
     }, []);
 
-    // --- Calcul du temps à afficher ---
     let elapsedString;
     let progress = 0;
     let isFinished = false;
 
     if (type === 'minuteur') {
         let currentRemaining = remaining;
-        if (runningSince) { // Si le minuteur tourne
+        if (runningSince) {
             currentRemaining = remaining - (currentTime - runningSince);
         }
-        
         if (currentRemaining <= 0) {
             isFinished = true;
             currentRemaining = 0;
         }
-
         elapsedString = millisecondsToHuman(currentRemaining);
         progress = (1 - (currentRemaining / duration)) * 100;
-
-    } else { // C'est un chronomètre
+    } else {
         elapsedString = window.helpers.renderElapsedString(elapsed, runningSince);
     }
+
+    useEffect(() => {
+        if (isFinished) {
+            audioRef.current.play();
+        }
+    }, [isFinished]);
 
     const renderButton = () => {
         const isRunning = !!runningSince;
@@ -67,13 +67,14 @@ function Timer({ id, type, title, project, elapsed, runningSince, duration, rema
                 '--timer-shadow-color': shadowColor
             }}
         >
-            {/* NOUVEAU : Barre de progression pour les minuteurs */}
+            <audio ref={audioRef} src="alarm.mp3" preload="auto" />
+
             {type === 'minuteur' && (
                 <div className="progress-bar-container">
                     <div className="progress-bar" style={{ width: `${progress}%` }}></div>
                 </div>
             )}
-
+            
             <div className='timer--content'>
                 <div className='timer--header'>
                     <h2>{title}</h2>
