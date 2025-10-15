@@ -31,7 +31,10 @@ class Timer extends Component {
             this.props.runningSince
         );
         return(
-            <div className='timer--box'> 
+            <div 
+                className='timer--box'
+                style={{ '--timer-neon-color': this.props.color }}
+            > 
                 <div className='timer--content'>
                     <div className='timer--header'>
                         <h2>{this.props.title}</h2>

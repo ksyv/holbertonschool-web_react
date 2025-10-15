@@ -3,33 +3,37 @@ import ActionContainer from "./ActionContainer";
 import ListContainer from "./ListContainer";
 import { v4 as uuidv4 } from 'uuid';
 
+const NEON_PALETTES = [
+    { base: '#00ffff', shadow: '#00bfff' }, // Cyan -> Bleu
+    { base: '#39ff14', shadow: '#ccff33' }, // Vert Fluo -> Vert Citron
+    { base: '#ffff00', shadow: '#ff9900' }, // Jaune -> Orange
+    { base: '#ff00ff', shadow: '#e600e6' }, // Magenta -> Magenta Foncé
+    { base: '#ff6600', shadow: '#ff3300' }, // Orange -> Rouge-Orange
+];
+
 class Box extends Component {
     state = {
         timers: [
             {
-                title:'apprendre React',
-                project:'Dev Web',
+                title:'',
+                project:'',
                 id:'01',
-                elapsed: 5609628,
+                elapsed: 0,
                 runningSince: null
             },
-            {
-                title:'apprendre React',
-                project:'Dev Web',
-                id:'02',
-                elapsed: 1349620,
-                runningSince: null
-            }
         ]
     }
 
     handleCreateTimer = ({title, project}) => {
+        const nextPalette = NEON_PALETTES[this.state.timers.length % NEON_PALETTES.length];
         const timer = {
             title, 
             project,
             id: uuidv4(),
             elapsed: 0,
             runningSince: null,
+            color: nextPalette.base,
+            shadowColor: nextPalette.shadow,
         }
         this.setState({
             timers: [...this.state.timers, timer]

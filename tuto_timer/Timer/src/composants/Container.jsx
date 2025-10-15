@@ -38,6 +38,7 @@ class Container extends Component {
                         id={this.props.id}
                         elapsed={this.props.elapsed}
                         runningSince={this.props.runningSince}
+                        color={this.props.color}
                         onEditFormOpen={this.handleEditFormOpen}
                         onDelete={this.props.onDelete}
                         onPlay={this.props.onPlay}
