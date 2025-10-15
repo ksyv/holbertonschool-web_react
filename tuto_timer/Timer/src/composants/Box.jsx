@@ -3,17 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
-import { 
-    collection, 
-    query, 
-    where, 
-    onSnapshot, 
-    addDoc, 
-    updateDoc, 
-    deleteDoc, 
-    doc 
-} from "firebase/firestore";
-
+import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import ListContainer from "./ListContainer";
 import ActionContainer from "./ActionContainer";
 
@@ -29,80 +19,66 @@ function Box() {
     const [timers, setTimers] = useState([]);
     const { currentUser } = useAuth();
 
-    // --- LECTURE DES DONNÉES EN TEMPS RÉEL ---
     useEffect(() => {
-        if (!currentUser) {
-            setTimers([]);
-            return;
-        }
-
-        // 1. On crée une requête : "donne-moi tous les timers de la collection 'timers'..."
-        const timersCollectionRef = collection(db, 'timers');
-        // 2. "...OÙ le champ 'userId' est égal à l'ID de mon utilisateur actuel."
-        const q = query(timersCollectionRef, where("userId", "==", currentUser.uid));
-
-        // 3. onSnapshot écoute les changements sur cette requête en temps réel.
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const timersFromDb = [];
-            querySnapshot.forEach((doc) => {
-                // On ajoute l'ID du document aux données du timer
-                timersFromDb.push({ ...doc.data(), id: doc.id });
-            });
+        if (!currentUser) { setTimers([]); return; }
+        const q = query(collection(db, 'timers'), where("userId", "==", currentUser.uid));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const timersFromDb = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setTimers(timersFromDb);
         });
-
-        // 4. On se désabonne de l'écouteur quand le composant est démonté.
         return () => unsubscribe();
+    }, [currentUser]);
 
-    }, [currentUser]); // Cet effet se relance si l'utilisateur change.
-
-    
-    // --- ÉCRITURE ET MODIFICATION DES DONNÉES ---
-
-    const handleCreateTimer = async ({ title, project }) => {
+    const handleCreateTimer = async (data) => {
+        // ... (cette fonction ne change pas)
+        const { title, project, type } = data;
         const nextPalette = NEON_PALETTES[timers.length % NEON_PALETTES.length];
-        const newTimer = {
-            title,
-            project,
-            elapsed: 0,
-            runningSince: null,
-            color: nextPalette.base,
-            shadowColor: nextPalette.shadow,
-            userId: currentUser.uid, // On ajoute l'ID de l'utilisateur
-        };
-        // On ajoute le nouveau timer à la collection Firestore
-        await addDoc(collection(db, 'timers'), newTimer);
+        let newTimerData;
+        if (type === 'minuteur') {
+            newTimerData = { type: 'minuteur', title, project, duration: data.duration, remaining: data.duration, runningSince: null };
+        } else {
+            newTimerData = { type: 'chrono', title, project, elapsed: 0, runningSince: null };
+        }
+        await addDoc(collection(db, 'timers'), { ...newTimerData, color: nextPalette.base, shadowColor: nextPalette.shadow, userId: currentUser.uid });
     };
 
     const handleEditTimer = async ({ id, title, project }) => {
-        const timerDocRef = doc(db, 'timers', id);
-        await updateDoc(timerDocRef, { title, project });
+        // La modification de la durée n'est pas implémentée pour simplifier, on ne modifie que le texte.
+        await updateDoc(doc(db, 'timers', id), { title, project });
     };
 
     const handleDeleteTimer = async (id) => {
-        const timerDocRef = doc(db, 'timers', id);
-        await deleteDoc(timerDocRef);
+        await deleteDoc(doc(db, 'timers', id));
     };
 
+    // MODIFIÉ : Gère les deux types
     const handlePlay = async (id) => {
-        const timerDocRef = doc(db, 'timers', id);
-        await updateDoc(timerDocRef, { runningSince: Date.now() });
+        const timer = timers.find(t => t.id === id);
+        if (!timer) return;
+
+        // On ne peut pas relancer un minuteur terminé
+        if (timer.type === 'minuteur' && timer.remaining <= 0) return;
+
+        await updateDoc(doc(db, 'timers', id), { runningSince: Date.now() });
     };
 
+    // MODIFIÉ : Gère les deux types
     const handlePause = async (id) => {
-        // On doit trouver le timer dans notre état local pour calculer le temps écoulé
-        const timerToPause = timers.find(timer => timer.id === id);
-        if (timerToPause) {
-            const now = Date.now();
-            const lastElapsed = now - timerToPause.runningSince;
-            const newTotalElapsed = timerToPause.elapsed + lastElapsed;
+        const timer = timers.find(t => t.id === id);
+        if (!timer || !timer.runningSince) return; // Ne rien faire s'il n'est pas en cours
 
-            const timerDocRef = doc(db, 'timers', id);
-            await updateDoc(timerDocRef, {
-                runningSince: null,
-                elapsed: newTotalElapsed,
-            });
+        const now = Date.now();
+        const lastInterval = now - timer.runningSince;
+        
+        let updates = {};
+        if (timer.type === 'minuteur') {
+            const newRemaining = Math.max(0, timer.remaining - lastInterval);
+            updates = { remaining: newRemaining, runningSince: null };
+        } else { // chrono
+            const newElapsed = timer.elapsed + lastInterval;
+            updates = { elapsed: newElapsed, runningSince: null };
         }
+        await updateDoc(doc(db, 'timers', id), updates);
     };
 
     return (
