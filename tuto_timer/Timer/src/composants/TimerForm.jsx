@@ -31,24 +31,27 @@ function TimerForm({ id, title: initialTitle = "", project: initialProject = "",
     return (
         <div className='form'>
             <div className='form--content'>
-                <div className="form--item" style={{ flexDirection: 'row', gap: '1rem', justifyContent: 'center', marginBottom: '2rem' }}>
-                    <label>
+                {/* --- MODIFICATION ICI --- */}
+                <div className="form--item radio-group" style={{ flexDirection: 'row', gap: '2rem', justifyContent: 'center', marginBottom: '2rem' }}>
+                    <label className="radio-label">
                         <input type="radio" name="type" value="chrono" checked={type === 'chrono'} onChange={() => setType('chrono')} />
-                        Chronomètre
+                        <span className="radio-custom"></span>
+                        <span>Chronomètre</span>
                     </label>
-                    <label>
+                    <label className="radio-label">
                         <input type="radio" name="type" value="minuteur" checked={type === 'minuteur'} onChange={() => setType('minuteur')} />
-                        Minuteur
+                        <span className="radio-custom"></span>
+                        <span>Minuteur</span>
                     </label>
                 </div>
                 
                 <div className='form--item'>
                     <label>Titre</label>
-                    <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Titre du timer" />
+                    <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Apprendre React" />
                 </div>
                 <div className='form--item'>
                     <label>Projet</label>
-                    <input type='text' value={project} onChange={(e) => setProject(e.target.value)} placeholder="Titre du projet" />
+                    <input type='text' value={project} onChange={(e) => setProject(e.target.value)} placeholder="Développement Web" />
                 </div>
 
                 {type === 'minuteur' && (
