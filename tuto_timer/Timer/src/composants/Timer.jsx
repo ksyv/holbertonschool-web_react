@@ -2,6 +2,13 @@ import React, {Component} from "react";
 import '../helpers'
 
 class Timer extends Component {
+    componentDidMount() {
+        this.myInterval = setInterval(() => { this.forceUpdate() }, 50);
+    }
+    componentWillUnmount() {
+        clearInterval(this.myInterval);
+    }
+
     handlePlay = () => {
         this.props.onPlay(this.props.id);
     }
@@ -21,7 +28,7 @@ class Timer extends Component {
     render() {
         const elapsedString = window.helpers.renderElapsedString(
             this.props.elapsed,
-            this.props.runnnningSince
+            this.props.runningSince
         );
         return(
             <div className='timer--box'> 
