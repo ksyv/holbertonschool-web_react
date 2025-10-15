@@ -53,7 +53,7 @@ class TimerForm extends Component {
                 </div>
                 <div className='form--button'>
                     <button className='button btn--submit' onClick={this.handleClick}>{submitText}</button>
-                    <button className='button btn--cancel'>Annuler</button>
+                    <button className='button btn--cancel' onClick={this.props.onCloseForm} >Annuler</button>
                 </div>
             </div>
         )
