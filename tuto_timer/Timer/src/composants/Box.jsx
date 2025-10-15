@@ -1,5 +1,3 @@
-// src/composants/Box.jsx
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
@@ -30,7 +28,6 @@ function Box() {
     }, [currentUser]);
 
     const handleCreateTimer = async (data) => {
-        // ... (cette fonction ne change pas)
         const { title, project, type } = data;
         const nextPalette = NEON_PALETTES[timers.length % NEON_PALETTES.length];
         let newTimerData;
@@ -42,39 +39,45 @@ function Box() {
         await addDoc(collection(db, 'timers'), { ...newTimerData, color: nextPalette.base, shadowColor: nextPalette.shadow, userId: currentUser.uid });
     };
 
-    const handleEditTimer = async ({ id, title, project }) => {
-        // La modification de la durée n'est pas implémentée pour simplifier, on ne modifie que le texte.
-        await updateDoc(doc(db, 'timers', id), { title, project });
+    const handleEditTimer = async (data) => {
+        const { id, title, project, type, duration } = data;
+        const timerDocRef = doc(db, 'timers', id);
+        
+        let updates = { title, project };
+
+        if (type === 'minuteur') {
+            updates.duration = duration;
+            updates.remaining = duration;
+            updates.runningSince = null;
+        } else {
+            updates.elapsed = duration;
+            updates.runningSince = null;
+        }
+
+        await updateDoc(timerDocRef, updates);
     };
 
     const handleDeleteTimer = async (id) => {
         await deleteDoc(doc(db, 'timers', id));
     };
 
-    // MODIFIÉ : Gère les deux types
     const handlePlay = async (id) => {
         const timer = timers.find(t => t.id === id);
         if (!timer) return;
-
-        // On ne peut pas relancer un minuteur terminé
         if (timer.type === 'minuteur' && timer.remaining <= 0) return;
-
         await updateDoc(doc(db, 'timers', id), { runningSince: Date.now() });
     };
 
-    // MODIFIÉ : Gère les deux types
     const handlePause = async (id) => {
         const timer = timers.find(t => t.id === id);
-        if (!timer || !timer.runningSince) return; // Ne rien faire s'il n'est pas en cours
-
+        if (!timer || !timer.runningSince) return;
         const now = Date.now();
         const lastInterval = now - timer.runningSince;
-        
         let updates = {};
         if (timer.type === 'minuteur') {
             const newRemaining = Math.max(0, timer.remaining - lastInterval);
             updates = { remaining: newRemaining, runningSince: null };
-        } else { // chrono
+        } else {
             const newElapsed = timer.elapsed + lastInterval;
             updates = { elapsed: newElapsed, runningSince: null };
         }

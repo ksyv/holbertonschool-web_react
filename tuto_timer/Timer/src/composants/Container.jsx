@@ -1,4 +1,3 @@
-// src/composants/Container.jsx
 
 import React, { useState } from "react";
 import TimerForm from "./TimerForm";
@@ -15,9 +14,7 @@ function Container(props) {
     if (isFormOpen) {
         return (
             <TimerForm
-                id={props.id}
-                title={props.title}
-                project={props.project}
+                {...props} 
                 onFormSubmit={handleFormSubmit}
                 onCloseForm={() => setFormOpen(false)}
             />
