@@ -81,6 +81,9 @@ function Timer({ id, type, title, project, elapsed, runningSince, duration, rema
                 </div>
                 <div className='timer--meta'>
                     <p>{project}</p>
+                    <span className="timer-type">
+                            {type === 'minuteur' ? 'Minuteur' : 'Chronomètre'}
+                    </span>
                 </div>
                 <div className='timer--h2'>
                     <h4>{isFinished ? "Terminé !" : elapsedString}</h4>
