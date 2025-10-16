@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+// ON N'A PLUS BESOIN DE useTheme ici
 import { db } from "../firebase";
 import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc, writeBatch, getDocs } from "firebase/firestore";
 import ListContainer from "./ListContainer";
 import ActionContainer from "./ActionContainer";
 
-const NEON_PALETTES = [
-    { base: '#00ffff', shadow: '#00bfff' },
-    { base: '#39ff14', shadow: '#ccff33' },
-    { base: '#ffff00', shadow: '#ff9900' },
-    { base: '#ff00ff', shadow: '#e600e6' },
-    { base: '#ff6600', shadow: '#ff3300' },
-];
+// LA PALETTE N'A PLUS RIEN À FAIRE ICI
+// const NEON_PALETTES = [ ... ];
 
 function Box() {
     const [timers, setTimers] = useState([]);
     const { currentUser } = useAuth();
+    // ON N'A PLUS BESOIN DE useTheme ici
 
     useEffect(() => {
         if (!currentUser) { setTimers([]); return; }
@@ -29,8 +26,9 @@ function Box() {
 
     const handleCreateTimer = async (data) => {
         const { title, project, type } = data;
-        const nextPalette = NEON_PALETTES[timers.length % NEON_PALETTES.length];
-        const commonData = { title, project, type, color: nextPalette.base, shadowColor: nextPalette.shadow, userId: currentUser.uid };
+        
+        // commonData ne contient PLUS JAMAIS de 'color' ou 'shadowColor'
+        let commonData = { title, project, type, userId: currentUser.uid };
 
         if (type === 'pomodoro') {
             const pomodoroRef = await addDoc(collection(db, 'timers'), { ...commonData, currentPhaseIndex: 0, runningSince: null, remaining: 0 });
@@ -99,7 +97,7 @@ function Box() {
         if (timer.type === 'pomodoro' && !timer.runningSince) {
             const currentPhaseIndex = timer.currentPhaseIndex || 0;
             const phasesRef = collection(db, 'timers', id, 'phases');
-            // Gérer le cas où on a fini la session et on appuie sur play (recommencer)
+            
             const isFinished = currentPhaseIndex >= (await getDocs(phasesRef)).size;
             const targetIndex = isFinished ? 0 : currentPhaseIndex;
             
@@ -112,7 +110,6 @@ function Box() {
             
             if (!phaseSnapshot.empty) {
                 const phaseData = phaseSnapshot.docs[0].data();
-                // Si on relance une phase en pause, on utilise le temps restant. Sinon, on prend la durée totale de la phase.
                 updates.remaining = (timer.remaining > 0 && !isFinished) ? timer.remaining : phaseData.duration;
             }
         }

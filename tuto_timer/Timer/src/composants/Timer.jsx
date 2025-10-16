@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTheme } from '../context/ThemeContext';
 import { db } from "../firebase";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import '../helpers';
@@ -12,8 +13,9 @@ const millisecondsToHuman = (ms) => {
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
-function Timer({ id, type, title, project, elapsed, runningSince, duration, remaining, color, shadowColor, onEditFormOpen, onDelete, onPlay, onPause, onAddTime, currentPhaseIndex }) {
+function Timer({ id, type, title, project, elapsed, runningSince, duration, remaining, onEditFormOpen, onDelete, onPlay, onPause, onAddTime, currentPhaseIndex, index }) {
     
+    const { theme } = useTheme();
     const [currentTime, setCurrentTime] = useState(Date.now());
     const audioRef = useRef(null);
     const [phases, setPhases] = useState([]);
@@ -45,7 +47,10 @@ function Timer({ id, type, title, project, elapsed, runningSince, duration, rema
             if (isRunning) {
                 currentRemaining = remaining - (currentTime - runningSince);
             }
-            if (currentRemaining <= 0 && isRunning) { isFinished = true; currentRemaining = 0; }
+            if (currentRemaining <= 0 && isRunning) {
+                isFinished = true;
+                currentRemaining = 0;
+            }
             elapsedString = millisecondsToHuman(currentRemaining);
             progress = (1 - (currentRemaining / currentPhase.duration)) * 100;
         } else {
@@ -64,10 +69,22 @@ function Timer({ id, type, title, project, elapsed, runningSince, duration, rema
     
     useEffect(() => {
         if (isFinished) {
-            audioRef.current.play();
+            if (audioRef.current) {
+                audioRef.current.play();
+            }
             onPause(id, true);
         }
     }, [isFinished, id, onPause]);
+    
+    let styleProps = {};
+    if (theme.useDynamicColors && theme.dynamicPalette?.length > 0) {
+        const palette = theme.dynamicPalette;
+        const colorPalette = palette[index % palette.length];
+        styleProps = {
+            '--timer-neon-color': colorPalette.base,
+            '--timer-shadow-color': colorPalette.shadow,
+        };
+    }
 
     const renderButton = () => {
         if (type === 'pomodoro' && phases.length > 0 && currentPhaseIndex >= phases.length) {
@@ -80,8 +97,8 @@ function Timer({ id, type, title, project, elapsed, runningSince, duration, rema
     const timerBoxClasses = `timer--box ${isRunning ? 'is-running' : ''}`;
 
     return (
-        <div className={timerBoxClasses} style={{ '--timer-neon-color': color, '--timer-shadow-color': shadowColor }}>
-            <audio ref={audioRef} src="alarm.mp3" preload="auto" />
+        <div className={timerBoxClasses} style={styleProps}>
+            <audio ref={audioRef} src={theme.sounds.alarm} preload="auto" />
             {(type === 'minuteur' || type === 'pomodoro') && (
                 <div className="progress-bar-container"><div className="progress-bar" style={{ width: `${progress}%` }}></div></div>
             )}

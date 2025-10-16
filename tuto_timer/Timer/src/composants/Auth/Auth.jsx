@@ -1,13 +1,13 @@
-// src/composants/Auth/Auth.jsx
-
 import React, { useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import { auth } from '../../firebase';
-import { 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword 
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
 } from 'firebase/auth';
 
 function Auth() {
+    const { theme } = useTheme();
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,9 +30,9 @@ function Auth() {
     };
 
     return (
-        <div className="main-container">
+        <div className="main-container auth-container">
             <header className="app-header">
-                <h1 className="app--title">CYBER TIMER</h1>
+                <h1 className="app--title">{theme.title}</h1>
             </header>
             <div className='boxed--view' style={{ maxWidth: '400px', marginTop: '3rem' }}>
                 <div className='form'>

@@ -4,12 +4,13 @@ import Container from "./Container";
 const ListContainer = (props) => {
     return (
         <div className="list--container">
-            {props.timers.map((timer) => (
+            {/* On récupère l'index de chaque timer dans la liste */}
+            {props.timers.map((timer, index) => (
                 <Container 
                     key={timer.id}
-                    // On s'assure de bien passer toutes les props reçues
                     {...props}
                     {...timer} 
+                    index={index} // Et on le passe comme une nouvelle prop
                 />
             ))}
         </div>

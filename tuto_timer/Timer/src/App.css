@@ -1,12 +1,15 @@
-/* === VARIABLES & GLOBAL RESETS === */
+/* ============================================= */
+/* 1. VARIABLES & STYLES GLOBAUX        */
+/* ============================================= */
 :root {
   --bg-color: #0d0d0d;
   --card-color: #0b0c2a;
   --text-color: #e0e0e0;
-  --primary-neon: #00ffff; /* Cyan */
-  --secondary-neon: #ff00ff; /* Magenta */
-  --danger-neon: #ff3300; /* Red-Orange */
-  --font-family: 'Orbitron', sans-serif;
+  --primary-neon: #00ffff;
+  --secondary-neon: #ff00ff;
+  --danger-neon: #ff3300;
+  --shadow-strength: 15px;
+  --text-shadow-strength: 5px;
 }
 
 * {
@@ -20,24 +23,17 @@ html {
 }
 
 body {
-  font-family: var(--font-family);
   font-size: 1.6rem;
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--bg-color);
-  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-
-/* === ANIMATIONS === */
-@keyframes pulse {
-  0% { box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--primary-neon), inset 0 0 8px var(--primary-neon); }
-  50% { box-shadow: 0 0 15px var(--secondary-neon), 0 0 25px var(--primary-neon), inset 0 0 12px var(--primary-neon); }
-  100% { box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--primary-neon), inset 0 0 8px var(--primary-neon); }
-}
-
-
-/* === MAIN LAYOUT === */
+/* ============================================= */
+/* 2. LAYOUT PRINCIPAL                  */
+/* ============================================= */
 .App {
   display: flex;
   justify-content: center;
@@ -46,72 +42,92 @@ body {
   padding: 4rem 2rem;
 }
 
+.main-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-header + .boxed--view {
+  margin-top: 3rem;
+}
+
 .boxed--view {
   width: 100%;
-  max-width: 450px; 
-  background-color: rgba(11, 12, 42, 0.85);
+  max-width: 450px;
+  background-color: var(--card-color);
   border: 2px solid var(--primary-neon);
   border-radius: 12px;
   padding: 2.5rem;
-  box-shadow: 0 0 15px var(--secondary-neon), 0 0 25px var(--primary-neon);
+  box-shadow: 0 0 var(--shadow-strength) var(--primary-neon), 0 0 calc(var(--shadow-strength) * 1.5) var(--secondary-neon);
   backdrop-filter: blur(3px);
-  transition: max-width 0.4s ease-in-out; /* NOUVEAU : Animation de la largeur */
+  transition: all 0.4s ease-in-out;
 }
 
-/* NOUVEAU : Media queries pour élargir le conteneur sur les grands écrans */
-@media (min-width: 768px) {
-  .boxed--view {
-    max-width: 700px; /* Pour 2 colonnes */
-  }
-}
-@media (min-width: 1050px) {
-  .boxed--view {
-    max-width: 1050px; /* Pour 3 colonnes */
-  }
-}
+
 
 .boxed--view__box {
   width: 100%;
 }
 
-
-
 .list--container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem; 
+  gap: 2rem;
 }
 
+/* ============================================= */
+/* 3. HEADER & TITRE                    */
+/* ============================================= */
+.app-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
 
-/* === TIMER & FORM CARD  === */
-.timer--box,
-.form {
+.app--title {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: var(--primary-neon);
+  text-shadow: 0 0 var(--text-shadow-strength) var(--primary-neon), 0 0 calc(var(--text-shadow-strength) * 2) var(--secondary-neon);
+}
+
+/* ============================================= */
+/* 4. CARTE TIMER                       */
+/* ============================================= */
+.timer--box {
   border: 1px solid var(--timer-neon-color, var(--primary-neon));
-  background: linear-gradient(145deg, rgba(11, 12, 42, 0.6), rgba(40, 44, 52, 0.6));
+  background: none;
+  background-color: rgba(0,0,0,0.1);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon));
+  box-shadow: 0 0 5px var(--timer-shadow-color, var(--secondary-neon));
   display: flex;
   flex-direction: column;
-  margin-bottom: 0;
   flex: 1 1 300px;
   min-width: 280px;
+  transition: box-shadow 0.3s ease;
 }
 
-.timer--content,
-.form--content {
+.timer--box.is-running {
+  box-shadow: 0 0 12px var(--timer-shadow-color, var(--secondary-neon)), 0 0 20px var(--timer-neon-color, var(--primary-neon));
+}
+
+.timer--content {
   padding: 1.5rem;
   flex-grow: 1;
 }
 
-
-/* === TYPOGRAPHY  === */
 .timer--header h2 {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 0.2rem;
-  color: var(--timer-neon-color, var(--primary-neon)); 
+  color: var(--timer-neon-color, var(--primary-neon));
   text-transform: uppercase;
 }
 
@@ -126,8 +142,8 @@ body {
   font-weight: 900;
   text-align: center;
   margin: 1.5rem 0;
-  color: var(--timer-neon-color, var(--primary-neon)); 
-  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)), 0 0 10px var(--timer-neon-color, var(--primary-neon)), 0 0 15px white; 
+  color: var(--timer-neon-color, var(--primary-neon));
+  text-shadow: 0 0 var(--text-shadow-strength) var(--timer-neon-color, var(--primary-neon)), 0 0 calc(var(--text-shadow-strength) * 2) var(--timer-shadow-color, var(--primary-neon));
 }
 
 .actions {
@@ -138,26 +154,73 @@ body {
   font-weight: 700;
 }
 
-.trash, .edit {
+.trash, .edit, .add-time {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-transform: uppercase;
 }
 
 .trash:hover {
-  color: var(--secondary-neon);
-  text-shadow: 0 0 5px var(--secondary-neon);
-  transform: scale(1.1);
+  color: var(--danger-neon);
+  text-shadow: 0 0 5px var(--danger-neon);
 }
 
 .edit:hover {
-  color: var(--timer-neon-color, var(--primary-neon)); 
-  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon)); 
-  transform: scale(1.1);
+  color: var(--timer-neon-color, var(--primary-neon));
+  text-shadow: 0 0 5px var(--timer-neon-color, var(--primary-neon));
 }
 
+.add-time {
+  color: var(--primary-neon);
+}
 
-/* === FORMS  === */
+.add-time:hover {
+  text-shadow: 0 0 5px var(--primary-neon);
+}
+
+.phase-info, .timer-type {
+  color: var(--text-color);
+}
+
+.timer-type {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--timer-neon-color, var(--primary-neon));
+  border: 1px solid var(--timer-neon-color, var(--primary-neon));
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--timer-neon-color, var(--primary-neon));
+  box-shadow: 0 0 5px var(--timer-shadow-color, var(--secondary-neon));
+  transition: width 0.1s linear;
+}
+
+/* ============================================= */
+/* 5. FORMULAIRES                       */
+/* ============================================= */
+.form {
+  border: 1px solid var(--primary-neon);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 5px var(--secondary-neon);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-color);
+}
+
 .form--item label {
   display: block;
   font-weight: 700;
@@ -166,79 +229,150 @@ body {
   text-transform: uppercase;
 }
 
+.timer--content,
+.form--content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow: hidden; /* <-- LA LIGNE MAGIQUE À AJOUTER */
+}
+
 .form--item input {
   width: 100%;
   padding: 1.2rem;
   border: 1px solid var(--primary-neon);
   border-radius: 6px;
   font-size: 1.6rem;
-  font-family: var(--font-family);
-  background-color: #0d0d0d;
-  color: #e0e0e0;
+  font-family: inherit;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   transition: all 0.2s;
 }
 
 .form--item input:focus {
   outline: none;
-  box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--primary-neon);
+  box-shadow: 0 0 8px var(--primary-neon), 0 0 15px var(--secondary-neon);
 }
 
+/* -- Boutons radio -- */
+.radio-group .radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
 
-/* === BUTTONS  === */
+.radio-group input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 2px solid var(--secondary-neon);
+  border-radius: 50%;
+  margin-right: 1rem;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.radio-label:hover .radio-custom {
+  border-color: var(--primary-neon);
+}
+
+.radio-group input[type="radio"]:checked + .radio-custom {
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 8px var(--primary-neon);
+}
+
+.radio-custom::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--primary-neon);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.radio-group input[type="radio"]:checked + .radio-custom::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.radio-group input[type="radio"]:checked + .radio-custom + span {
+  color: var(--primary-neon);
+  text-shadow: 0 0 3px var(--primary-neon);
+}
+
+.btn-remove-phase {
+  background-color: transparent;
+  border: 1px solid var(--danger-neon);
+  color: var(--danger-neon);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-phase:hover {
+  background-color: var(--danger-neon);
+  color: white;
+  box-shadow: 0 0 8px var(--danger-neon);
+}
+
+/* ============================================= */
+/* 6. BOUTONS & CONTRÔLES               */
+/* ============================================= */
 .button, .button__outline {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 4.5rem;
-  border: 2px solid var(--timer-neon-color, var(--primary-neon)); 
+  border: 2px solid var(--timer-neon-color, var(--primary-neon));
   border-radius: 8px;
-  font-family: var(--font-family);
+  font-family: inherit;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--primary-neon);
   cursor: pointer;
   text-transform: uppercase;
-  background: linear-gradient(45deg, #220a22, #0d5a5a);
+  background: transparent;
   transition: all 0.3s ease;
-  box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--timer-neon-color, var(--primary-neon)); 
+  box-shadow: 0 0 8px var(--timer-shadow-color, var(--secondary-neon)), 0 0 15px var(--timer-neon-color, var(--primary-neon));
 }
-
-.button:not(.btn--cancel):not(.red), .button__outline {
-  animation: pulse 2.5s infinite;
-}
-
 
 .button:hover, .button__outline:hover {
-  background: linear-gradient(45deg, var(--timer-neon-color, var(--primary-neon)), var(--secondary-neon));
-  box-shadow: 0 0 15px var(--secondary-neon), 0 0 25px var(--timer-neon-color, var(--primary-neon));
-  transform: scale(1.05);
+  background: var(--timer-neon-color, var(--primary-neon));
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--timer-shadow-color, var(--secondary-neon)), 0 0 25px var(--timer-neon-color, var(--primary-neon));
 }
 
-.button {
+.timer--box .button {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.button.red {
-  border-color: var(--danger-neon);
-  box-shadow: 0 0 8px var(--danger-neon), 0 0 15px var(--danger-neon);
-}
-
-.button.red:hover {
-  background: linear-gradient(45deg, var(--danger-neon), var(--secondary-neon));
-}
-
 .button__outline {
   margin-top: 1rem;
-  border-color: var(--primary-neon); 
+  border-color: var(--primary-neon);
   box-shadow: 0 0 8px var(--secondary-neon), 0 0 15px var(--primary-neon);
 }
-.button__outline:hover {
-    background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
-    box-shadow: 0 0 15px var(--secondary-neon), 0 0 25px var(--primary-neon);
-}
 
+.button__outline:hover {
+  background: var(--primary-neon);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--secondary-neon), 0 0 25px var(--primary-neon);
+}
 
 .form--button {
   display: flex;
@@ -250,126 +384,104 @@ body {
 }
 
 .btn--submit {
-  border-bottom-right-radius: 0;
+  border-color: var(--primary-neon);
+  color: var(--primary-neon);
+}
+.btn--submit:hover {
+  background: var(--primary-neon);
+  color: var(--bg-color);
 }
 
 .btn--cancel {
-  background: #1a1a1a;
-  border-left: none;
-  border-bottom-left-radius: 0;
+  border-color: var(--text-color);
+  color: var(--text-color);
+  opacity: 0.7;
 }
-
 .btn--cancel:hover {
-  background: #333;
+  background: var(--text-color);
+  color: var(--bg-color);
+  opacity: 1;
 }
 
-/* ===  Barre de progression === */
-.progress-bar-container {
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: inherit;
+}
+
+.theme-selector {
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid var(--primary-neon);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.2s ease;
+}
+
+.theme-selector:focus {
+  outline: none;
+  box-shadow: 0 0 8px var(--primary-neon);
+}
+
+.btn-logout {
+  position: static !important;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.8rem 1.5rem !important;
+  font-size: 1.4rem !important;
+  border-radius: 6px !important;
+  background: var(--card-color) !important;
+  border: 1px solid var(--danger-neon) !important;
+  color: var(--danger-neon) !important;
+  box-shadow: none !important;
+  animation: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-logout:hover {
+  background: var(--danger-neon) !important;
+  color: white !important;
+  box-shadow: 0 0 8px var(--danger-neon) !important;
+}
+
+
+/* ============================================= */
+/* 7. RESPONSIVE (MEDIA QUERIES)        */
+/* ============================================= */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .app--title {
+    font-size: 2.8rem;
+  }
+  .header-controls {
+    position: static;
+    transform: none;
     width: 100%;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.1);
+    justify-content: center;
+  }
+  .theme-selector, .btn-logout {
+    flex-grow: 1;
+    text-align: center;
+  }
+  .boxed--view {
+    max-width: 700px;
+  }
 }
 
-.progress-bar {
-    height: 100%;
-    background-color: var(--timer-neon-color, var(--primary-neon));
-    box-shadow: 0 0 5px var(--timer-shadow-color, var(--secondary-neon));
-    transition: width 0.1s linear;
-}
-
-.timer-type {
-    display: inline-block;
-    margin-left: 1rem;
-    padding: 0.2rem 0.6rem;
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--timer-neon-color, var(--primary-neon));
-    border: 1px solid var(--timer-neon-color, var(--primary-neon));
-    border-radius: 4px;
-    opacity: 0.7;
-}
-
-.radio-group .radio-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: color 0.2s ease-in-out;
-}
-
-
-.radio-group input[type="radio"] {
-    opacity: 0;
-    position: absolute;
-    width: 0;
-    height: 0;
-}
-
-
-.radio-custom {
-    display: inline-block;
-    width: 1.8rem;
-    height: 1.8rem;
-    border: 2px solid var(--text-muted-color, #718096);
-    border-radius: 50%;
-    margin-right: 1rem;
-    transition: all 0.2s ease-in-out;
-    position: relative;
-}
-
-
-.radio-label:hover .radio-custom {
-    border-color: var(--primary-neon);
-}
-
-
-.radio-group input[type="radio"]:checked + .radio-custom {
-    border-color: var(--primary-neon);
-    box-shadow: 0 0 8px var(--primary-neon);
-}
-
-
-.radio-custom::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-    background-color: var(--primary-neon);
-    transform: translate(-50%, -50%) scale(0); 
-    transition: transform 0.2s ease-in-out;
-}
-
-
-.radio-group input[type="radio"]:checked + .radio-custom::after {
-    transform: translate(-50%, -50%) scale(1);
-}
-
-
-.radio-group input[type="radio"]:checked + .radio-custom + span {
-    color: var(--primary-neon);
-    text-shadow: 0 0 3px var(--primary-neon);
-}
-
-/* === Style pour le formulaire Pomodoro === */
-.btn-remove-phase {
-    background-color: transparent;
-    border: 1px solid var(--danger-neon);
-    color: var(--danger-neon);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-family: var(--font-family);
-    transition: all 0.2s ease;
-}
-
-.btn-remove-phase:hover {
-    background-color: var(--danger-neon);
-    color: white;
-    box-shadow: 0 0 8px var(--danger-neon);
+@media (min-width: 1050px) {
+  .boxed--view {
+    max-width: 1050px;
+  }
 }
