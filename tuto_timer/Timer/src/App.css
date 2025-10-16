@@ -354,3 +354,22 @@ body {
     color: var(--primary-neon);
     text-shadow: 0 0 3px var(--primary-neon);
 }
+
+/* === Style pour le formulaire Pomodoro === */
+.btn-remove-phase {
+    background-color: transparent;
+    border: 1px solid var(--danger-neon);
+    color: var(--danger-neon);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: var(--font-family);
+    transition: all 0.2s ease;
+}
+
+.btn-remove-phase:hover {
+    background-color: var(--danger-neon);
+    color: white;
+    box-shadow: 0 0 8px var(--danger-neon);
+}
