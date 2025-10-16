@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, {useState} from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { auth } from '../../firebase';
 import {
@@ -30,46 +31,39 @@ function Auth() {
     };
 
     return (
-        <div className="main-container auth-container">
+        <div className="main-container">
             <header className="app-header">
                 <h1 className="app--title">{theme.title}</h1>
             </header>
-            <div className='boxed--view' style={{ maxWidth: '400px', marginTop: '3rem' }}>
-                <div className='form'>
-                    <form onSubmit={handleSubmit} className='form--content'>
+
+            <div className="auth-description">
+                <h2>Maîtrisez votre temps, boostez votre focus.</h2>
+                <p>Créez et personnalisez vos chronomètres, minuteurs et sessions Pomodoro. Choisissez votre thème et transformez votre productivité.</p>
+            </div>
+
+            <div className='boxed--view'>
+                <form className='form' onSubmit={handleSubmit}>
+                    <div className='form--content'>
                         <h2>{isLogin ? 'Connexion' : 'Inscription'}</h2>
                         {error && <p style={{ color: 'var(--danger-neon)' }}>{error}</p>}
                         <div className='form--item'>
                             <label>Email</label>
-                            <input
-                                type='email'
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
+                            <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
                         </div>
                         <div className='form--item'>
                             <label>Mot de passe</label>
-                            <input
-                                type='password'
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                            <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
                         </div>
-                        <button type="submit" className='button' style={{ borderRadius: '8px', marginTop: '1rem' }}>
+                    </div>
+                    <div className='form--button'>
+                        <button type="submit" className='button btn--submit'>
                             {isLogin ? 'Se connecter' : "S'inscrire"}
                         </button>
-                    </form>
-                    <div style={{ padding: '1.5rem', textAlign: 'center' }}>
-                        <span
-                            onClick={() => setIsLogin(!isLogin)}
-                            style={{ cursor: 'pointer', color: 'var(--primary-neon)' }}
-                        >
-                            {isLogin ? "Pas de compte ? S'inscrire" : 'Déjà un compte ? Se connecter'}
+                        <span onClick={() => setIsLogin(!isLogin)} className='button btn--cancel' style={{ cursor: 'pointer', textTransform: 'none', fontSize: '1.4rem' }}>
+                            {isLogin ? "S'inscrire" : 'Se connecter'}
                         </span>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

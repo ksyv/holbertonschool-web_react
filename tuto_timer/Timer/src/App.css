@@ -485,3 +485,27 @@ body {
     max-width: 1050px;
   }
 }
+
+/* ============================================= */
+/* NOUVEAU : DESCRIPTION PAGE DE CONNEXION       */
+/* ============================================= */
+.auth-description {
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 4rem;
+  color: var(--text-color);
+}
+
+.auth-description h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-neon);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 var(--text-shadow-strength) var(--primary-neon);
+}
+
+.auth-description p {
+  font-size: 1.6rem;
+  opacity: 0.9;
+  line-height: 1.7;
+}
