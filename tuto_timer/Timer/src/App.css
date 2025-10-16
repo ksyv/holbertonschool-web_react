@@ -36,9 +36,16 @@ body {
 /* ============================================= */
 .App {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.app-content {
+  flex: 1; /* C'est la ligne magique qui pousse le footer en bas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   padding: 4rem 2rem;
 }
 
@@ -47,6 +54,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.boxed--view {
+  width: 100%;
+  max-width: 450px;
+  /* ... Le reste de la règle .boxed--view ne change pas ... */
 }
 
 .app-header + .boxed--view {
@@ -508,4 +521,35 @@ body {
   font-size: 1.6rem;
   opacity: 0.9;
   line-height: 1.7;
+}
+
+/* ============================================= */
+/* 8. FOOTER                                     */
+/* ============================================= */
+.app-footer {
+  width: 100%;
+  text-align: center;
+  padding: 2rem; /* Un peu moins de padding vertical */
+  margin-top: auto; /* Sécurité supplémentaire pour le pousser en bas */
+  border-top: 1px solid var(--secondary-neon);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0; /* Empêche le footer de rétrécir */
+}
+
+.app-footer:hover {
+  opacity: 1;
+}
+
+.app-footer a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin: 0 1.5rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.app-footer a:hover {
+  color: var(--primary-neon);
+  text-decoration: underline;
 }

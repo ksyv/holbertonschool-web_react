@@ -6,6 +6,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from 'firebase/auth';
+import Footer from '../Footer';
+
 
 function Auth() {
     const { theme } = useTheme();

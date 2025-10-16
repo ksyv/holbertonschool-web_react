@@ -7,6 +7,7 @@ import { signOut } from 'firebase/auth';
 import Box from './composants/Box';
 import Auth from './composants/Auth/Auth';
 import './App.css';
+import Footer from './composants/Footer';
 
 function ThemeSelector() {
     const { themeName, setThemeName } = useTheme();
@@ -55,20 +56,23 @@ function App() {
 
     return (
         <div className='App'>
-            {currentUser ? (
-                <div className="main-container">
-                    <header className="app-header">
-                        <h1 className="app--title">{theme.title}</h1>
-                        <div className="header-controls">
-                            <ThemeSelector />
-                            <button onClick={handleLogout} className='button btn-logout'>
-                                Déconnexion
-                            </button>
-                        </div>
-                    </header>
-                    <Box />
-                </div>
-            ) : ( <Auth /> )}
+            <div className='main'>
+                {currentUser ? (
+                    <div className="main-container">
+                        <header className="app-header">
+                            <h1 className="app--title">{theme.title}</h1>
+                            <div className="header-controls">
+                                <ThemeSelector />
+                                <button onClick={handleLogout} className='button btn-logout'>
+                                    Déconnexion
+                                </button>
+                            </div>
+                        </header>
+                        <Box />
+                    </div>
+                ) : ( <Auth /> )}
+            </div>
+            <Footer />
         </div>
     );
 }
