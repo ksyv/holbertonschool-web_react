@@ -24,15 +24,20 @@ const mockNotifications = [
 ];
 
 let consoleSpy;
+let handleDisplayDrawerSpy;
+let handleHideDrawerSpy;
 
 beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
     consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
+    handleDisplayDrawerSpy = jest.fn();
+    handleHideDrawerSpy = jest.fn();
 });
 
 afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
     consoleSpy.mockRestore();
+    jest.clearAllMocks(); 
     cleanup();
 });
 
@@ -138,4 +143,34 @@ test('Logs correct message when clicking on third notification item', () => {
     fireEvent.click(thirdNotification);
 
     expect(consoleSpy).toHaveBeenCalledWith('Notification 3 has been marked as read');
+});
+
+test('calls handleDisplayDrawer when the menu item is clicked', () => {
+    const { getByText } = render(
+        <Notifications
+            displayDrawer={false}
+            notifications={[]}
+            handleDisplayDrawer={handleDisplayDrawerSpy}
+            handleHideDrawer={handleHideDrawerSpy}
+        />
+    );
+
+    fireEvent.click(getByText('Your notifications'));
+
+    expect(handleDisplayDrawerSpy).toHaveBeenCalled();
+});
+
+test('calls handleHideDrawer when the close button is clicked', () => {
+    const { getByRole } = render(
+        <Notifications
+            displayDrawer={true}
+            notifications={mockNotifications}
+            handleDisplayDrawer={handleDisplayDrawerSpy}
+            handleHideDrawer={handleHideDrawerSpy}
+        />
+    );
+
+    fireEvent.click(getByRole('button', { name: /close/i }));
+
+    expect(handleHideDrawerSpy).toHaveBeenCalled();
 });

@@ -4,7 +4,6 @@ import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
 import NotificationItemShape from './NotificationItemShape';
 
-// Keyframes pour l'animation d'opacité
 const fadeIn = {
   '0%': {
     opacity: 0.5,
@@ -14,7 +13,6 @@ const fadeIn = {
   },
 };
 
-// Keyframes pour l'animation de rebond
 const bounce = {
   '0%': {
     transform: 'translateY(0px)',
@@ -35,20 +33,21 @@ class Notifications extends PureComponent {
     console.log(`Notification ${id} has been marked as read`);
   };
 
+
   render() {
-    const { notifications = [], displayDrawer = false } = this.props;
+    const { notifications = [], displayDrawer = false, handleDisplayDrawer, handleHideDrawer } = this.props;
 
     return (
       <div className={css(styles.notificationsContainer)}>
         {!displayDrawer && (
-          <div className={css(styles.menuItem)}>Your notifications</div>
+          <div className={css(styles.menuItem)} onClick={handleDisplayDrawer}>Your notifications</div>
         )}
         {displayDrawer && (
           <div className={css(styles.notificationsPanel)}>
             <button
               className={css(styles.closeButton)}
               aria-label="Close"
-              onClick={() => console.log('Close button has been clicked')}
+              onClick={handleHideDrawer}
             >
               x
             </button>
@@ -65,8 +64,12 @@ class Notifications extends PureComponent {
                 ))}
               </ul>
             ) : (
-              <p className={css(styles.noNotifications)}>No new notification for now</p>
+              <>
+                <p>Here is the list of notifications</p>
+                <p className={css(styles.noNotifications)}>No new notification for now</p>
+              </>
             )}
+            {notifications.length > 0 && <p>Here is the list of notifications</p>}
           </div>
         )}
       </div>
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     cursor: 'pointer',
   },
-  // Keyframes pour les animations
   fadeIn,
   bounce,
 });
@@ -136,11 +138,15 @@ const styles = StyleSheet.create({
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(NotificationItemShape),
   displayDrawer: PropTypes.bool,
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
 };
 
 Notifications.defaultProps = {
   notifications: [],
   displayDrawer: false,
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
 };
 
 export default Notifications;

@@ -14,6 +14,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.state = {
+      displayDrawer: false,
+    };
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
   }
 
   static defaultProps = {
@@ -27,6 +32,14 @@ class App extends Component {
     }
   }
 
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -37,6 +50,7 @@ class App extends Component {
 
   render() {
     const { isLoggedIn = false } = this.props;
+    const { displayDrawer } = this.state; 
 
     const notificationsList = [
       {
@@ -64,7 +78,12 @@ class App extends Component {
 
     return (
       <>
-        <Notifications notifications={notificationsList} />
+        <Notifications
+          notifications={notificationsList}
+          displayDrawer={displayDrawer} 
+          handleDisplayDrawer={this.handleDisplayDrawer} 
+          handleHideDrawer={this.handleHideDrawer} 
+        />
 
         <Header />
 
@@ -112,10 +131,12 @@ const styles = StyleSheet.create({
 });
 
 App.propTypes = {
+  logOut: PropTypes.func,
   isLoggedIn: PropTypes.bool,
 };
 
 App.defaultProps = {
+  logOut: () => {},
   isLoggedIn: false,
 };
 
