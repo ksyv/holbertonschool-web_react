@@ -43,6 +43,22 @@ class Notifications extends Component {
   render() {
     const { notifications = [], displayDrawer = false, handleDisplayDrawer, handleHideDrawer } = this.props;
 
+    const notificationsContent = notifications.length > 0 ? (
+      <ul className={css(styles.notificationsList)}>
+        {notifications.map((notification) => (
+          <NotificationItem
+            key={notification.id}
+            type={notification.type}
+            value={notification.value}
+            html={notification.html}
+            markAsRead={this.markAsRead}
+          />
+        ))}
+      </ul>
+    ) : (
+      <p className={css(styles.noNotifications)}>No new notification for now</p>
+    );
+
     return (
       <div className={css(styles.notificationsContainer)}>
         {!displayDrawer && (
@@ -57,22 +73,9 @@ class Notifications extends Component {
             >
               x
             </button>
+            
             <p>Here is the list of notifications</p>
-            {notifications.length > 0 ? (
-              <ul className={css(styles.notificationsList)}>
-                {notifications.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    type={notification.type}
-                    value={notification.value}
-                    html={notification.html}
-                    markAsRead={this.markAsRead}
-                  />
-                ))}
-              </ul>
-            ) : (
-              <p className={css(styles.noNotifications)}>No new notification for now</p>
-            )}
+            {notificationsContent}
           </div>
         )}
       </div>
