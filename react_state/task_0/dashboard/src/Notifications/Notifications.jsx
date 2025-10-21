@@ -34,7 +34,6 @@ class Notifications extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    // Re-rendre si la liste de notifications change de longueur OU si displayDrawer change
     return (
       nextProps.notifications.length !== this.props.notifications.length ||
       nextProps.displayDrawer !== this.props.displayDrawer
