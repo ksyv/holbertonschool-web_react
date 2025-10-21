@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
@@ -28,10 +28,18 @@ const bounce = {
   },
 };
 
-class Notifications extends PureComponent {
+class Notifications extends Component {
   markAsRead = (id) => {
     console.log(`Notification ${id} has been marked as read`);
   };
+
+  shouldComponentUpdate(nextProps) {
+    // Re-rendre si la liste de notifications change de longueur OU si displayDrawer change
+    return (
+      nextProps.notifications.length !== this.props.notifications.length ||
+      nextProps.displayDrawer !== this.props.displayDrawer
+    );
+  }
 
   render() {
     const { notifications = [], displayDrawer = false, handleDisplayDrawer, handleHideDrawer } = this.props;
