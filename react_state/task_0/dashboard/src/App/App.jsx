@@ -17,7 +17,6 @@ class App extends Component {
     this.state = {
       displayDrawer: false,
     };
-    // ASSUREZ-VOUS QUE CES LIGNES SONT PRÉSENTES
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
   }
