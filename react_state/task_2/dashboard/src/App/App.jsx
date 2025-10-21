@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StyleSheet, css } from 'aphrodite';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
@@ -6,39 +7,107 @@ import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
-import { getLatestNotification } from "../utils/utils";
-import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
-import newContext from '../Context/context';
+import WithLogging from '../HOC/WithLogging';
+import { getLatestNotification } from '../utils/utils';
+import { newContext, defaultUser } from '../Context/context';
+
+const LoginWithLogging = WithLogging(Login);
+const CourseListWithLogging = WithLogging(CourseList);
+
+const styles = StyleSheet.create({
+  reset: {
+    '*': {
+      boxSizing: 'border-box',
+      margin: 0,
+      padding: 0,
+      scrollBehavior: 'smooth',
+    },
+    '*::before': {
+      boxSizing: 'border-box',
+      margin: 0,
+      padding: 0,
+    },
+    '*::after': {
+      boxSizing: 'border-box',
+      margin: 0,
+      padding: 0,
+    },
+  },
+  app: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  body: {
+    flex: 1,
+    padding: '20px',
+  },
+  footer: {
+    padding: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily:
+      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+    fontSize: '0.8rem',
+    fontWeight: 200,
+    fontStyle: 'italic',
+    borderTop: '0.25rem solid #e1003c',
+  },
+});
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.state = {
-      displayDrawer: false,
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
-      logOut: this.logOut.bind(this),
-    };
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
+
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+
+    this.state = {
+      // État local requis
+      user: { ...defaultUser },
+      logOut: this.logOut, // référence dans l’état
+      // Stocker une valeur de provider stable et ne la recréer que lors d’un changement utile
+      contextValue: {
+        user: { ...defaultUser },
+        logOut: this.logOut,
+      },
+
+      // État existant
+      displayDrawer: false,
+    };
   }
 
-  static defaultProps = {
-    // Les props isLoggedIn et logOut sont supprimées
-  };
+  // Méthode de connexion : met à jour l’utilisateur et le contexte
+  logIn(email, password) {
+    const user = {
+      email: email || '',
+      password: password || '',
+      isLoggedIn: true,
+    };
+    this.setState({
+      user,
+      contextValue: {
+        user,
+        logOut: this.logOut,
+      },
+    });
+  }
 
-  handleKeyDown(event) {
-    if (event.ctrlKey && event.key === 'h') {
-      alert('Logging you out');
-      this.state.logOut();
-    }
+  // Méthode de déconnexion : réinitialise l’utilisateur et le contexte
+  logOut() {
+    const user = { ...defaultUser };
+    this.setState({
+      user,
+      contextValue: {
+        user,
+        logOut: this.logOut,
+      },
+    });
   }
 
   handleDisplayDrawer() {
@@ -49,28 +118,36 @@ class App extends Component {
     this.setState({ displayDrawer: false });
   }
 
-  logIn(email, password) {
-    this.setState({
-      user: {
-        email: email,
-        password: password,
-        isLoggedIn: true,
-      },
-    });
-  }
-
-  logOut() {
-    this.setState({
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
-    });
+  handleKeyDown(event) {
+    if (event.ctrlKey && event.key === 'h') {
+      alert('Logging you out');
+      this.logOut();
+    }
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
+
+    const resetCSS = `
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+      }
+
+      #root {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+    `;
+
+    const style = document.createElement('style');
+    style.textContent = resetCSS;
+    document.head.appendChild(style);
   }
 
   componentWillUnmount() {
@@ -78,52 +155,44 @@ class App extends Component {
   }
 
   render() {
-    const { displayDrawer, user } = this.state;
+    const { user, contextValue } = this.state;
 
     const notificationsList = [
-      {
-        id: 1,
-        type: "default",
-        value: "New course available"
-      },
-      {
-        id: 2,
-        type: "urgent",
-        value: "New resume available"
-      },
-      {
-        id: 3,
-        type: "urgent",
-        value: getLatestNotification()
-      }
+      { id: 1, type: 'default', value: 'New course available' },
+      { id: 2, type: 'urgent', value: 'New resume available' },
+      { id: 3, type: 'urgent', value: getLatestNotification() },
     ];
 
     const coursesList = [
       { id: 1, name: 'ES6', credit: 60 },
       { id: 2, name: 'Webpack', credit: 20 },
-      { id: 3, name: 'React', credit: 40 }
+      { id: 3, name: 'React', credit: 40 },
     ];
 
     return (
-      <newContext.Provider value={this.state}>
-        <>
+      <newContext.Provider value={contextValue}>
+        <div className={css(styles.app)}>
           <Notifications
             notifications={notificationsList}
-            displayDrawer={displayDrawer}
+            displayDrawer={this.state.displayDrawer}
             handleDisplayDrawer={this.handleDisplayDrawer}
             handleHideDrawer={this.handleHideDrawer}
           />
 
           <Header />
 
-          <div className={css(styles.AppBody)}>
+          <div className={css(styles.body)}>
             {user.isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
-                <CourseList courses={coursesList} />
+                <CourseListWithLogging courses={coursesList} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title="Log in to continue">
-                <Login logIn={this.logIn} />
+                <LoginWithLogging
+                  logIn={this.logIn}
+                  email={user.email}
+                  password={user.password}
+                />
               </BodySectionWithMarginBottom>
             )}
 
@@ -132,36 +201,13 @@ class App extends Component {
             </BodySection>
           </div>
 
-          <Footer />
-        </>
+          <div className={css(styles.footer)}>
+            <Footer />
+          </div>
+        </div>
       </newContext.Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  AppBody: {
-    paddingTop: '2rem',
-    paddingBottom: '20rem',
-    fontSize: '1.25rem',
-    borderBottom: '3px solid #E11D3F',
-    fontFamily: 'Arial, Helvetica, sans-serif',
-    minHeight: '100vh',
-    position: 'relative',
-    textAlign: 'center',
-  },
-  AppFooter: {
-    textAlign: 'center',
-    fontStyle: 'italic',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTop: '3px solid #E11D3F',
-  },
-});
-
-App.propTypes = {};
-
-App.defaultProps = {};
 
 export default App;

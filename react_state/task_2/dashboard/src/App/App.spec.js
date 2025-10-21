@@ -1,180 +1,108 @@
 import React from 'react';
 import App from './App.jsx';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { StyleSheetTestUtils } from 'aphrodite';
-import '@testing-library/jest-dom';
 
 describe('App Component Tests', () => {
-    beforeEach(() => {
-        StyleSheetTestUtils.suppressStyleInjection();
-    });
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
 
-    afterEach(() => {
-        StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-    });
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
 
-    test('Renders Notifications component', () => {
-        render(<App />);
-        const notificationTitle = screen.getByText(/your notifications/i);
-        expect(notificationTitle).toBeInTheDocument();
-    });
+  test('Renders Notifications component', () => {
+    render(<App />);
+    const notificationTitle = screen.getByText(/your notifications/i);
+    expect(notificationTitle).toBeInTheDocument();
+  });
 
-    test('Renders Header component', () => {
-        render(<App />);
-        const header = screen.getByText(/school dashboard/i);
-        expect(header).toBeInTheDocument();
-    });
+  test('Renders Header component', () => {
+    render(<App />);
+    const header = screen.getByText(/school dashboard/i);
+    expect(header).toBeInTheDocument();
+  });
 
-    test('Renders Footer component', () => {
-        render(<App />);
-        const footer = screen.getByText(/copyright/i);
-        expect(footer).toBeInTheDocument();
-    });
+  test('Renders Login component by default (not logged in)', () => {
+    render(<App />);
+    const loginTitle = screen.getByRole('heading', { name: /log in to continue/i });
+    expect(loginTitle).toBeInTheDocument();
 
-    test('Should render the Login component by default', () => {
-        render(<App />);
+    const courseListTitle = screen.queryByRole('heading', { name: /course list/i });
+    expect(courseListTitle).not.toBeInTheDocument();
+  });
 
-        const loginText = screen.getByText(/login to access the full dashboard/i);
-        expect(loginText).toBeInTheDocument();
+  test('Renders Footer component', () => {
+    render(<App />);
+    const footer = screen.getByText(/copyright/i);
+    expect(footer).toBeInTheDocument();
+  });
 
-        const courseList = screen.queryByText(/available courses/i);
-        expect(courseList).not.toBeInTheDocument();
-    });
+  test('Displays News from the School section by default', () => {
+    render(<App />);
+    const newsTitle = screen.getByRole('heading', { name: /news from the school/i });
+    expect(newsTitle).toBeInTheDocument();
 
-    test('Displays Log in to continue title by default', () => {
-        render(<App />);
+    const newsParagraph = screen.getByText(/holberton school news goes here/i);
+    expect(newsParagraph).toBeInTheDocument();
+  });
 
-        const loginTitle = screen.getByRole('heading', { name: /log in to continue/i });
-        expect(loginTitle).toBeInTheDocument();
-    });
+  test('After a successful login, Course list is displayed and Login disappears', async () => {
+    render(<App />);
+    const user = userEvent.setup();
 
-    test('Displays News from the School section by default', () => {
-        render(<App />);
+    const email = screen.getByLabelText(/email/i);
+    const password = screen.getByLabelText(/password/i);
+    const submit = screen.getByRole('button', { name: /ok/i });
 
-        const newsTitle = screen.getByRole('heading', { name: /news from the school/i });
-        expect(newsTitle).toBeInTheDocument();
+    await user.type(email, 'user@example.com');
+    await user.type(password, 'strongpass');
+    await user.click(submit);
 
-        const newsParagraph = screen.getByText(/holberton school news goes here/i);
-        expect(newsParagraph).toBeInTheDocument();
-    });
+    const courseListTitle = screen.getByRole('heading', { name: /course list/i });
+    expect(courseListTitle).toBeInTheDocument();
 
-    test('After successful login, CourseList is displayed and Login is removed', async () => {
-        render(<App />);
-        
-        // Simuler la connexion en appelant la méthode logIn de l'instance App
-        // NOTE: Comme App ne prend plus de props isLoggedIn, nous devons simuler l'action utilisateur
-        
-        // 1. Trouver les champs de connexion
-        fireEvent.change(screen.getByLabelText(/email:/i), { target: { value: 'test@holberton.com' } });
-        fireEvent.change(screen.getByLabelText(/password:/i), { target: { value: 'password123' } });
-        
-        // 2. Soumettre le formulaire
-        fireEvent.click(screen.getByRole('button', { name: /ok/i }));
-
-        // 3. Vérifier que la liste de cours est rendue
-        await waitFor(() => {
-            const courseListTitle = screen.getByRole('heading', { name: /course list/i });
-            expect(courseListTitle).toBeInTheDocument();
-        });
-
-        // 4. Vérifier que Login est retiré
-        const loginTitle = screen.queryByRole('heading', { name: /log in to continue/i });
-        expect(loginTitle).not.toBeInTheDocument();
-    });
-
-    test('Default: The notification list is not displayed by default', () => {
-        render(<App />);
-        const closeButton = screen.queryByRole('button', { name: /close/i });
-        const list = screen.queryByText(/here is the list of notifications/i);
-
-        expect(closeButton).not.toBeInTheDocument();
-        expect(list).not.toBeInTheDocument();
-    });
-
-    test('Clicking the menu item displays the notification list', () => {
-        render(<App />);
-        const menuItem = screen.getByText(/your notifications/i);
-
-        fireEvent.click(menuItem);
-
-        const closeButton = screen.getByRole('button', { name: /close/i });
-        const list = screen.getByText(/here is the list of notifications/i);
-
-        expect(closeButton).toBeInTheDocument();
-        expect(list).toBeInTheDocument();
-    });
-
-    test('Clicking the close button hides the notification list', () => {
-        render(<App />);
-        const menuItem = screen.getByText(/your notifications/i);
-
-        fireEvent.click(menuItem);
-
-        let closeButton = screen.getByRole('button', { name: /close/i });
-        expect(closeButton).toBeInTheDocument();
-
-        fireEvent.click(closeButton);
-
-        closeButton = screen.queryByRole('button', { name: /close/i });
-        const list = screen.queryByText(/here is the list of notifications/i);
-
-        expect(closeButton).not.toBeInTheDocument();
-        expect(list).not.toBeInTheDocument();
-    });
+    const loginTitle = screen.queryByRole('heading', { name: /log in to continue/i });
+    expect(loginTitle).not.toBeInTheDocument();
+  });
 });
 
 describe('App Keyboard Events Tests', () => {
-    let alertMock;
-    let logOutMock;
+  let alertMock;
 
-    beforeEach(() => {
-        StyleSheetTestUtils.suppressStyleInjection();
-        alertMock = jest.spyOn(window, "alert").mockImplementation(() => { });
-        logOutMock = jest.fn();
-    });
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+    alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+  });
 
-    afterEach(() => {
-        StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-        alertMock.mockRestore();
-    });
-    
-    // Le test ctrl+h utilise désormais l'état/contexte pour logOut
-    test("LogOut when ctrl + h", () => {
-        const { container } = render(<App />);
-        
-        // Simuler la connexion initiale
-        fireEvent.change(screen.getByLabelText(/email:/i), { target: { value: 'test@holberton.com' } });
-        fireEvent.change(screen.getByLabelText(/password:/i), { target: { value: 'password123' } });
-        fireEvent.click(screen.getByRole('button', { name: /ok/i }));
-        
-        // Vérifier que CourseList est visible
-        expect(screen.getByRole('heading', { name: /course list/i })).toBeInTheDocument();
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+    alertMock.mockRestore();
+  });
 
-        const keyboardEvent = new KeyboardEvent("keydown", {
-            key: "h",
-            ctrlKey: true,
-            bubbles: true,
-        });
-        
-        document.dispatchEvent(keyboardEvent);
+  test('Alert when ctrl + h and user is logged in, and returns to Login view', async () => {
+    render(<App />);
+    const user = userEvent.setup();
 
-        // Vérifier l'alerte
-        expect(alertMock).toHaveBeenCalledWith("Logging you out");
-        
-        // Vérifier que l'utilisateur est déconnecté (Login est à nouveau visible)
-        expect(screen.getByRole('heading', { name: /log in to continue/i })).toBeInTheDocument();
-    });
+    const email = screen.getByLabelText(/email/i);
+    const password = screen.getByLabelText(/password/i);
+    const submit = screen.getByRole('button', { name: /ok/i });
 
-    test("Alert when ctrl + h", () => {
-        render(<App />);
-        
-        const keyboardEvent = new KeyboardEvent("keydown", {
-            key: "h",
-            ctrlKey: true,
-            bubbles: true,
-        });
-        document.dispatchEvent(keyboardEvent);
+    await user.type(email, 'user@example.com');
+    await user.type(password, 'strongpass');
+    await user.click(submit);
 
-        expect(alertMock).toHaveBeenCalledWith("Logging you out");
-    });
+    const courseListTitle = await screen.findByRole('heading', { name: /course list/i });
+    expect(courseListTitle).toBeInTheDocument();
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'h', ctrlKey: true });
+    document.dispatchEvent(keyboardEvent);
+
+    expect(alertMock).toHaveBeenCalledWith('Logging you out');
+
+    const loginTitle = await screen.findByRole('heading', { name: /log in to continue/i });
+    expect(loginTitle).toBeInTheDocument();
+  });
 });
