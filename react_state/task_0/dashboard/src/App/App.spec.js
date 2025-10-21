@@ -1,7 +1,8 @@
 import React from 'react';
 import App from './App.jsx';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { StyleSheetTestUtils } from 'aphrodite';
+import '@testing-library/jest-dom';
 
 describe('App Component Tests', () => {
     beforeEach(() => {
@@ -78,6 +79,46 @@ describe('App Component Tests', () => {
 
         const newsParagraph = screen.getByText(/holberton school news goes here/i);
         expect(newsParagraph).toBeInTheDocument();
+    });
+
+    test('Default: The notification list is not displayed by default', () => {
+        render(<App />);
+        const closeButton = screen.queryByRole('button', { name: /close/i });
+        const list = screen.queryByText(/here is the list of notifications/i);
+
+        expect(closeButton).not.toBeInTheDocument();
+        expect(list).not.toBeInTheDocument();
+    });
+
+    test('Clicking the menu item displays the notification list', () => {
+        render(<App />);
+        const menuItem = screen.getByText(/your notifications/i);
+
+        fireEvent.click(menuItem);
+
+        const closeButton = screen.getByRole('button', { name: /close/i });
+        const list = screen.getByText(/here is the list of notifications/i);
+
+        expect(closeButton).toBeInTheDocument();
+        expect(list).toBeInTheDocument();
+    });
+
+    test('Clicking the close button hides the notification list', () => {
+        render(<App />);
+        const menuItem = screen.getByText(/your notifications/i);
+
+        fireEvent.click(menuItem);
+
+        let closeButton = screen.getByRole('button', { name: /close/i });
+        expect(closeButton).toBeInTheDocument();
+
+        fireEvent.click(closeButton);
+
+        closeButton = screen.queryByRole('button', { name: /close/i });
+        const list = screen.queryByText(/here is the list of notifications/i);
+
+        expect(closeButton).not.toBeInTheDocument();
+        expect(list).not.toBeInTheDocument();
     });
 });
 
