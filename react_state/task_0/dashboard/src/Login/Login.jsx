@@ -1,82 +1,70 @@
 import React from 'react';
-import { useRef } from 'react';
 import { StyleSheet, css } from 'aphrodite';
+import { useRef } from 'react';
 
 function Login() {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
 
-  return (
-    <div className={css(styles.AppBody)}>
-      <p>Login to access the full dashboard</p>
+    const styles = StyleSheet.create({
+        AppBody: {
+            padding: '2rem',
+            flex: 1
+        },
+        AppBodyP: {
+            marginBottom: '1rem'
+        },
+        form: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: '1rem',
+            '@media (max-width: 900px)': {
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.5rem'
+            }
+        },
+        formInput: {
+            padding: '0 0.25rem'
+        },
+        formButton: {
+            padding: '0 0.25rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }
+    });
 
-      <form className={css(styles.AppForm)}>
-        <label htmlFor="email" className={css(styles.AppLabel)} onClick={() => emailRef.current && emailRef.current.focus()}>
-          Email:
-        </label>
-        <input id="email" name="email" type="email" ref={emailRef} className={css(styles.AppInput)} />
+    return (
+        <div className={css(styles.AppBody)}>
+            <p className={css(styles.AppBodyP)}>Login to access the full dashboard</p>
 
-        <label htmlFor="password" className={css(styles.AppLabel)} onClick={() => passwordRef.current && passwordRef.current.focus()}>
-          Password:
-        </label>
-        <input id="password" name="password" type="password" role="textbox" ref={passwordRef} className={css(styles.AppInput)} />
+            <form className={css(styles.form)}>
+                <label htmlFor='email' onClick={() => emailRef.current && emailRef.current.focus()}>Email:</label>
+                <input
+                    id='email'
+                    name='email'
+                    type='email'
+                    ref={emailRef}
+                    className={css(styles.formInput)}
+                />
 
-        <button type="submit" className={css(styles.AppButton)}>OK</button>
-      </form>
-    </div>
-  );
+                <label htmlFor='password' onClick={() => passwordRef.current && passwordRef.current.focus()}>Password:</label>
+                <input
+                    id='password'
+                    name='password'
+                    type='password'
+                    role="textbox"
+                    ref={passwordRef}
+                    className={css(styles.formInput)}
+                />
+
+                <button type='submit' className={css(styles.formButton)}>OK</button>
+            </form>
+        </div>
+    );
 }
-
-const styles = StyleSheet.create({
-  AppBody: {
-    padding: '2rem',
-    height: '40vh',
-    borderBottom: '3px solid #E11D3F',
-  },
-  AppForm: {
-    // Styles pour les grands écrans
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: '1rem',
-    '@media (max-width: 900px)': {
-      // Styles pour les petits écrans
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      padding: '0 2rem',
-    },
-  },
-  AppLabel: {
-    // Styles pour les grands écrans
-    textAlign: 'left',
-    '@media (max-width: 900px)': {
-      // Styles pour les petits écrans
-      width: '100%',
-      marginBottom: '0.5rem',
-    },
-  },
-  AppInput: {
-    // Styles pour les grands écrans
-    marginBottom: '1rem',
-    '@media (max-width: 900px)': {
-      // Styles pour les petits écrans
-      width: '100%',
-    },
-  },
-  AppButton: {
-    // Styles pour les grands écrans
-    '@media (max-width: 900px)': {
-      // Styles pour les petits écrans
-      width: '100%',
-      marginTop: '1rem',
-      padding: '0.5rem 1rem',
-      backgroundColor: '#E11D3F',
-      color: 'white',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-    },
-  },
-});
 
 export default Login;
