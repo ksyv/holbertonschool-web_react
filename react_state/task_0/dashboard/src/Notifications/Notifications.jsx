@@ -50,7 +50,6 @@ class Notifications extends PureComponent {
             >
               x
             </button>
-            {/* Logique corrigée pour toujours afficher le paragraphe d'en-tête lorsque le tiroir est affiché */}
             <p>Here is the list of notifications</p>
             {notifications.length > 0 ? (
               <ul className={css(styles.notificationsList)}>
@@ -65,7 +64,6 @@ class Notifications extends PureComponent {
                 ))}
               </ul>
             ) : (
-              // N'afficher "No new notification..." que si la liste est vide (sans le paragraphe d'en-tête ici)
               <p className={css(styles.noNotifications)}>No new notification for now</p>
             )}
           </div>
