@@ -37,7 +37,7 @@ beforeEach(() => {
 afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
     consoleSpy.mockRestore();
-    jest.clearAllMocks(); 
+    jest.clearAllMocks();
     cleanup();
 });
 

@@ -50,7 +50,7 @@ class App extends Component {
 
   render() {
     const { isLoggedIn = false } = this.props;
-    const { displayDrawer } = this.state; 
+    const { displayDrawer } = this.state;
 
     const notificationsList = [
       {
@@ -80,9 +80,9 @@ class App extends Component {
       <>
         <Notifications
           notifications={notificationsList}
-          displayDrawer={displayDrawer} 
-          handleDisplayDrawer={this.handleDisplayDrawer} 
-          handleHideDrawer={this.handleHideDrawer} 
+          displayDrawer={displayDrawer}
+          handleDisplayDrawer={this.handleDisplayDrawer}
+          handleHideDrawer={this.handleHideDrawer}
         />
 
         <Header />

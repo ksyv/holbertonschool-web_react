@@ -33,7 +33,6 @@ class Notifications extends PureComponent {
     console.log(`Notification ${id} has been marked as read`);
   };
 
-
   render() {
     const { notifications = [], displayDrawer = false, handleDisplayDrawer, handleHideDrawer } = this.props;
 
@@ -52,24 +51,26 @@ class Notifications extends PureComponent {
               x
             </button>
             {notifications.length > 0 ? (
-              <ul className={css(styles.notificationsList)}>
-                {notifications.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    type={notification.type}
-                    value={notification.value}
-                    html={notification.html}
-                    markAsRead={this.markAsRead}
-                  />
-                ))}
-              </ul>
+              <>
+                <p>Here is the list of notifications</p>
+                <ul className={css(styles.notificationsList)}>
+                  {notifications.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      type={notification.type}
+                      value={notification.value}
+                      html={notification.html}
+                      markAsRead={this.markAsRead}
+                    />
+                  ))}
+                </ul>
+              </>
             ) : (
               <>
                 <p>Here is the list of notifications</p>
                 <p className={css(styles.noNotifications)}>No new notification for now</p>
               </>
             )}
-            {notifications.length > 0 && <p>Here is the list of notifications</p>}
           </div>
         )}
       </div>
